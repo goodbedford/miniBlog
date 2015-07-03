@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>mini blog</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="jumbotron text-center">
+    <h1>Junior Developers Blog</h1>
+  </div>
+  <div class="container">
+    <div class="row text-center btnRow">
+      <button class="btn btn-lg"></button>
+    </div>
+  </div>
+  <div class="container">
+    <div id="blog-container">
+    </div>
+  </div>
+
+
+ <!-- underscore template -->
+ <script type="text/template" id="blog-template">
+ <div class="row">
+  <div class="">
+    <h2 class=""><%= title %></h2>
+    <p class=""><%= body %><br /><%= date %></p>
+
+
+  </div>
+ </div>
+
+ </script> 
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

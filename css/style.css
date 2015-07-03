@@ -2,6 +2,17 @@
   height: 100px;
 }
 
+.mainColor{
+  color: black;
+}
+
+.secondaryColor{
+  color: blue;
+}
+
+.accentColor{
+  color: orange;
+}
 margin-top-20{
   margin-top: 20px;
 

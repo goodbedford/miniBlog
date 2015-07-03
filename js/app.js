@@ -4,7 +4,7 @@ var $submitBtn = $("#submitBtn");
 var $titleInput = $("#titleInput");
 var $postBody = $("#postBody");
 var $modalForm = $("#modalForm");
-
+var $makePostBtn =$("#makePostBtn");
 //Post constructor
 function Post (title, body){
   console.log("started making new post");
@@ -13,7 +13,8 @@ function Post (title, body){
   this.postDate = dateFormat();
   this.posts = localStorage.getItem("posts"); 
   this.key = "posts";
-  console.log("this is in post constructor and post is-",this.posts);
+  this.comments = [];
+  //console.log("this is in post constructor and post is-",this.posts);
   function dateFormat (){
   var d = new Date();
   return d.toLocaleDateString();
@@ -23,6 +24,7 @@ function Post (title, body){
 Post.all =[];
 
 function SaveRender(){}
+
 SaveRender.prototype.saveToLs = function(post){ 
     //console.log("this is the post json in if statement-", posts_json);
   if (this.posts) {
@@ -35,13 +37,17 @@ SaveRender.prototype.saveToLs = function(post){
   localStorage.setItem(this.key, JSON.stringify(posts_json) );
   //console.log("this is local storage-", localStorage);
 }
-SaveRender.prototype.saveToPostAll = function(post){
+SaveRender.prototype.saveToPostAll = function(){
   Post.all.push(this);
 }
 
 SaveRender.prototype.renderTemplatePostAll = function(template_source, where) {
   var template = _.template($(template_source).html());
-     $(where).append(template(this));
+  var index =  Post.all.indexOf(this);
+  var $post = $(template(this));
+  $post.attr("data-index", index);
+
+     $(where).prepend($post);
 }
 SaveRender.prototype.renderTemplate = function(template_source, where) {
   var posts_json = JSON.parse(this.posts);
@@ -71,13 +77,23 @@ function postToBlog(){
 
 function postFromLocStorage (){
   event.preventDefault();
-    var tempPost = new Post($titleInput.val(),$postBody.val() );
-    temPost.saveToLs(tempPost);
+  var tempPost = new Post($titleInput.val(),$postBody.val() );
+  temPost.saveToLs(tempPost);
   //console.log("this is posttoBlog tempPost" + tempPost);
   tempPost.renderTemplate("#blog-template", "#blog-container");
   $("#postModal").modal("hide");
   $modalForm[0].reset();
   $titleInput.focus();
+}
+
+function addComments(post){
+  console.log("add a comment");
+
+  //$("#postModal").attr("data-toggle", "modal");
+  $("#postModal").on("data-toggle", "modal");
+
+
+
 }
 
 
@@ -100,13 +116,16 @@ post1.saveToPostAll();
 post1.renderTemplatePostAll("#blog-template", "#blog-container");
 
 var post2 = new Post("2finding my community", "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love.");
-post2.saveToPostAll(post2);
+post2.saveToPostAll();
 post2.renderTemplatePostAll("#blog-template", "#blog-container");
  
-//submit button
+ console.log(Post.all)
+//submit button 
 $modalForm.on("submit", postToBlog);
 //$modalForm.on("submit", postFromLocStorage);
+  
 
+$("button.comment").on("click", addComments);
 
 });
 

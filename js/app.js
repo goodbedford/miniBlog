@@ -1,3 +1,5 @@
+$(document).ready(function(){
+
 var $submitBtn = $("#submitBtn");
 var $titleInput = $("#titleInput");
 var $postBody = $("#postBody");
@@ -5,20 +7,22 @@ var $modalForm = $("#modalForm");
 
 //Post constructor
 function Post (title, body){
+  console.log("started making new post");
   this.title = title;
   this.body = body;
   this.date = dateFormat();
-  this.posts = localStorage.getItem("posts");
+  this.posts = localStorage.getItem("posts"); 
   this.key = "posts";
-  //console.log("this is in post constructor and post is-",this.posts);
+  console.log("this is in post constructor and post is-",this.posts);
   function dateFormat (){
   var d = new Date();
   return d.toLocaleDateString();
   }
 }
+//
+Post.all =[];
 
 function SaveRender(){}
-
 SaveRender.prototype.saveToLs = function(post){
   //console.log("insside saveToLs post is-", post);
     if (this.posts) {
@@ -31,17 +35,21 @@ SaveRender.prototype.saveToLs = function(post){
   //console.log("this is posts json should have two post objs in string-", JSON.stringify(posts_json) );
   localStorage.setItem(this.key, JSON.stringify(posts_json) );
   //console.log("this is local storage-", localStorage);
+}
 
+SaveRender.prototype.saveToPostAll = function(post){
+  Post.all.push(this);
 }
 
 SaveRender.prototype.renderTemplate = function(template_source, where) {
 
-  var posts_json = JSON.parse(this.posts);
+  //var posts_json = JSON.parse(this.posts);
   var template = _.template($(template_source).html());
 
-  _.each(posts_json, function(post) {
-    $(where).append(template(post));
-  });
+     $(where).append(template(this));
+  // _.each(posts_json, function(post) {
+  //   $(where).append(template(post));
+  // });
 }
 
 Post.prototype = new SaveRender();
@@ -51,9 +59,9 @@ Post.prototype.constructor = Post;
 //postToBlog
 function postToBlog(){
 
-  var tempPost = new Post($titleInput,$postBody);
-  tempPost.saveToLs(tempPost);
-  console.log("this is posttoBlog tempPost" , tempPost);
+  var tempPost = new Post($titleInput.val(),$postBody.val() );
+  tempPost.saveToPostAll(tempPost);
+  //console.log("this is posttoBlog tempPost" + tempPost);
   tempPost.renderTemplate("#blog-template", "#blog-container");
 }
 
@@ -73,5 +81,10 @@ function postToBlog(){
 //submit button
 $modalForm.on("submit", postToBlog);
 
+$(localStorage).on("change", function(){
+  //window.location.reload();
+  console.log("localStorage had a change event");
+})
 
+ });
 

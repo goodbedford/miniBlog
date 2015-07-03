@@ -1,3 +1,14 @@
 #postBody{
   height: 100px;
 }
+
+
+.postBlock{
+      border-radius: 15px;
+    border:1px solid black;
+    border-left: 15px solid black;
+    list-style: none;
+    background-color: white;
+    
+    padding: 10px;
+}

@@ -18,14 +18,15 @@
     <div id="blog-container">
     </div>
     <!-- underscore template -->
-    <script type="text/template" id="blog-template">
-    <div class="row">
-     <div class="">
-       <h2 class=""><%= title %></h2>
-       <p class=""><%= body %><br /><%= date %></p>
-     </div>
-    </div>
-    </script>
+  <script type="text/template" id="blog-template">
+  <div class="row">
+   <div class="col-xs-8 col-xs-offset-2 postBlock top-margin-20">
+     <h2 class=""><%= title %></h2>
+     <p class=""><%= body %><br /><%= postDate %></p>
+   </div>
+  </div>
+  </script>
+
 
     <!-- Modal -->
     <div id="postModal" class="modal fade" role="dialog">
@@ -54,7 +55,6 @@
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           </div>
         </div>
-
       </div>
     </div>
   </div>

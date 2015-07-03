@@ -2,13 +2,18 @@
   height: 100px;
 }
 
+margin-top-20{
+  margin-top: 20px;
+
+}
 
 .postBlock{
-      border-radius: 15px;
+    border-radius: 15px;
     border:1px solid black;
-    border-left: 15px solid black;
+    border-left: 20px solid black;
     list-style: none;
     background-color: white;
-    
     padding: 10px;
+    margin-top: 20px;
 }
+

@@ -23,6 +23,18 @@ function Post (title, body){
 //
 Post.all =[];
 
+function Comments(body){
+  this.body = body;
+  this.postDate = dateFormat();
+
+  //date formatter
+  function dateFormat (){
+  var d = new Date();
+  return d.toLocaleDateString();
+  }
+}
+Comments.all =[];
+
 function SaveRender(){}
 
 SaveRender.prototype.saveToLs = function(post){ 
@@ -66,6 +78,12 @@ Post.prototype.constructor = Post;
 //postToBlog
 function postToBlog(){
   event.preventDefault();
+
+  if ( !($("body").hasClass("errorInput") ) ){ 
+
+  if ( $titleInput.val() !== "" && $postBody.val()   !== "")
+  {
+    $("body").removeClass("errorInput");
   var tempPost = new Post($titleInput.val(),$postBody.val() );
   tempPost.saveToPostAll(tempPost);
   //console.log("this is posttoBlog tempPost" + tempPost);
@@ -73,6 +91,22 @@ function postToBlog(){
   $("#postModal").modal("hide");
   $modalForm[0].reset();
   $titleInput.focus();
+  }else{
+    console.log("wrong input values");
+   var $alert = $("<div></div>");
+   $alert.addClass("alert alert-danger");
+   var $close = $("<a></a>");
+   $close.addClass("close");
+   $close.attr("href", "#");
+   $close.attr("data-dismiss", 'alert');
+   $close.attr("aria-label", "close");
+   $close.html("&times;");
+   $alert.html($close);
+   $alert.prepend("Please fill in all the inputs");
+   $(".modal-header").prepend($alert);
+   $("body").addClass("errorInput");
+  }
+}
 }
 
 function postFromLocStorage (){
@@ -88,12 +122,18 @@ function postFromLocStorage (){
 
 function addComments(post){
   console.log("add a comment");
+  $("#makePostBtn").trigger("click");
 
-  //$("#postModal").attr("data-toggle", "modal");
-  $("#postModal").on("data-toggle", "modal");
+  $("div.titleP").addClass("hide");
+  var tempComment = new Comment($titleInput, $postBody); 
+  Comments.all.push(tempComment);
+  $("#postModal").on("submit", function(event){
+    event.preventDefault();
+    console.log("i have been submitted by comments.")
+        $("div.titleP").removeClass("hide");
 
-
-
+  });
+   
 }
 
 
@@ -119,13 +159,21 @@ var post2 = new Post("2finding my community", "In just two weeks of dev school a
 post2.saveToPostAll();
 post2.renderTemplatePostAll("#blog-template", "#blog-container");
  
- console.log(Post.all)
+ console.log(Post.all);
 //submit button 
 $modalForm.on("submit", postToBlog);
+$makePostBtn.on("click", function(){
+  $titleInput.focus();
+});
+
+$("button.close").on("click", function(){
+  $("body").removeClass("errorInput");
+})
+
 //$modalForm.on("submit", postFromLocStorage);
   
 
-$("button.comment").on("click", addComments);
+//$("button.comment").on("click", addComments);
 
 });
 

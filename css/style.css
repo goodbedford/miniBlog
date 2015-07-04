@@ -1,13 +1,47 @@
+body{
+  background-color: rgba(38, 01, 01, .5);
+  background-image: url("../gblogo22.png");
+  background-size: 50px 50px;
+
+}
+
+
+h1{
+    font-size: 5em;
+  font-weight: bold;
+}
+.jumbotron{
+  background-color: #330000;
+  color: #CC6633;
+}
+
+
+
+button{
+    background-color: #330000;
+  color: #CC6633;
+}
+button:hover{
+  background-color: #CC6633;
+  color: #330000;
+}
 #postBody{
   height: 100px;
 }
 
+
 .mainColor{
-  color: black;
+  color: #330000;
+}
+.mainBgColor{
+  background-color: #330000;
 }
 
 .secondaryColor{
-  color: blue;
+  color: #CC6633;
+}
+.secondaryBgColor{
+  background-color: #CC6633;
 }
 
 .accentColor{
@@ -20,8 +54,8 @@ margin-top-20{
 
 .postBlock{
     border-radius: 15px;
-    border:1px solid black;
-    border-left: 20px solid black;
+    border:1px solid #330000;
+    border-left: 20px solid #330000;
     list-style: none;
     background-color: white;
     padding: 10px;

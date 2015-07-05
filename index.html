@@ -7,7 +7,7 @@
 </head>
 <body class="accentBgColor2">
   <div class="jumbotron text-center">
-    <h1>The <span class="secondaryColor">Junior</span> Developers Blog</h1>
+    <h1>The <span class="secondaryColor strike">Junior</span> Developers Blog</h1>
   </div>
 
   <div class="container">
@@ -24,11 +24,13 @@
    <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 postBlockRight">
      <h2 class="secondaryColor borderBtm"><%= title %></h2>
      <p class="majorColor"><%= body %><br /><span class="accentColor3 dateBoxRight"><%= postDate %></span></p>
-   <div class="accentColor"> <button class="addComment" data-toggle="" data-target="#commentModal">Add Comment</button></div> 
-     <div class="commentContainer hide"><textarea class="commentForm "></textarea><button class="btn">Submit</submit></div>
-
-   </div>
-
+  </div>  <!--
+  <div class="row">
+  <div class="col-xs-8 col-xs-offset-2">
+  <div class="accentColor"> <button class="addComment" data-toggle="" data-target="#commentModal">Add Comment</button></div> 
+      <div class="commentContainer hide"><textarea class="commentForm "></textarea><button class="btn">Submit</submit></div>
+    </div>
+    </div>  -->
   </div>
   </script> 
 
@@ -48,11 +50,11 @@
             <form id="modalForm" role="form">
               <div class="form-group titleP">
                 <label for="titleInput">Title:</label>
-                <input id="titleInput" type="text" class="form-control" autofocus>
+                <input id="titleInput" type="text" class="form-control" autofocus required>
               </div>
               <div class="form-group">
                 <label for="postBody">Post:</label>
-                <textarea id="postBody"  class="form-control"></textarea>
+                <textarea id="postBody"  class="form-control" required></textarea>
               </div>
               <button id="submitBtn" type="submit" class="btn btn-default">Submit</button>
             </form>

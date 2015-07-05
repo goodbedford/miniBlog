@@ -85,34 +85,40 @@ Post.prototype.constructor = Post;
 function postToBlog(){
   event.preventDefault();
 
-  if ( !($("body").hasClass("errorInput") ) ){ 
     console.log($postBody.val() );
     if ( $titleInput.val() !== "" && $postBody.val() !== "")
-    {
-      $("body").removeClass("errorInput");
-    var tempPost = new Post($titleInput.val(), $postBody.val() );
-    tempPost.saveToPostAll(tempPost);
-    //console.log("this is posttoBlog tempPost" + tempPost);
-    tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
-    $("#postModal").modal("hide");
-    $modalForm[0].reset();
-    $titleInput.focus();
+    { 
+      if( !$("body").hasClass("errorInputs")) {
+        $("body").removeClass("errorInput");
+        var tempPost = new Post($titleInput.val(), $postBody.val() );
+        tempPost.saveToPostAll(tempPost);
+        //console.log("this is posttoBlog tempPost" + tempPost);
+        tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
+        $("#postModal").modal("hide");
+        $modalForm[0].reset();
+        $titleInput.focus();
+      }
     }else{
-      console.log("wrong input values");
-     var $alert = $("<div></div>");
-     $alert.addClass("alert alert-danger");
-     var $close = $("<a></a>");
-     $close.addClass("close");
-     $close.attr("href", "#");
-     $close.attr("data-dismiss", 'alert');
-     $close.attr("aria-label", "close");
-     $close.html("&times;");
-     $alert.html($close);
-     $alert.prepend("Please fill in all the inputs");
-     $(".modal-header").prepend($alert);
-     $("body").addClass("errorInput");
-    }
-  }
+      if ( !($("body").hasClass("errorInput") ) ){
+
+       console.log("wrong input values");
+       var $alert = $("<div ></div>");
+       $alert.addClass("alert alert-danger");
+       var $close = $("<a></a>");
+       $close.addClass("close");
+       $close.attr("href", "#");  
+       $close.attr("data-dismiss", 'alert');
+       $close.attr("aria-label", "close");
+       $close.html("&times;");
+       $alert.html($close);
+       $alert.prepend("Please fill in all the inputs");
+       $(".modal-header").prepend($alert);
+       $("body").addClass("errorInput");
+      } else{
+        $("body").addClass("errorInput");
+        //$("#postModal").trigger("click", "submitBtn");
+      }
+    }  
 }
 
 function postFromLocStorage (){
@@ -163,9 +169,9 @@ function addCommentFromPost(){
     $col.html($commentContainer.children("textarea").val() );
     $row.html($col);
         console.log($row.html() );
-
     $commentRowBox.append($row );
-
+    $commentContainer.children("textarea").val("");
+    $commentContainer.addClass("hide");
   });
   //console.log($(this).parent().find(".commentContainer").html() );
   //var $commentForm = $("<div><textarea class='cForm'></textarea></div");

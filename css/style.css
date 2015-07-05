@@ -57,6 +57,14 @@ margin-top-20{
   color: #E9D1B1; 
 }
 
+.commentBox{
+  background-color: white;
+  color: #6A351B;
+  border: 1px solid #6A351B;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 15px;
+}
 .dateBoxLeft{
   position: relative;
   background-color: #BDD1B8 ;

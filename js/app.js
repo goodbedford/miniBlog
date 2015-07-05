@@ -151,8 +151,23 @@ function addComment(){
 }
 function addCommentFromPost(){
   console.log("add a comment");
-  $(this).parent().find(".commentForm").removeClass("hide");
-  console.log($(this).parent().find(".commentForm"));
+  $(this).parent().parent().find("div.commentContainer").removeClass("hide");
+  //console.log($(this));
+  var $commentRowBox = $(this).parent().parent().parent();
+  var $commentContainer = $(this).parent().parent().find("div.commentContainer");
+  var $cSubmitBtn = $(this).parent().siblings(".commentContainer").children("button");
+  
+  $cSubmitBtn.on("click",function(){
+    var $row = $("<div class='row'></div>");
+    var $col = $("<div class='col-xs-4 col-xs-offset-4 commentBox'></div>");
+    $col.html($commentContainer.children("textarea").val() );
+    $row.html($col);
+        console.log($row.html() );
+
+    $commentRowBox.append($row );
+
+  });
+  //console.log($(this).parent().find(".commentContainer").html() );
   //var $commentForm = $("<div><textarea class='cForm'></textarea></div");
   //$(this).parent().append($commentForm); 
   // var tempComment = new Comment( $("#commentTxt").val() );

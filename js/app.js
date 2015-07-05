@@ -23,7 +23,7 @@ function Post (title, body){
 //
 Post.all =[];
 
-function Comments(body){
+function Comment(body){
   this.body = body;
   this.postDate = dateFormat();
 
@@ -33,7 +33,7 @@ function Comments(body){
   return d.toLocaleDateString();
   }
 }
-Comments.all =[];
+Comment.all =[];
 
 function SaveRender(){}
 
@@ -58,7 +58,13 @@ SaveRender.prototype.renderTemplatePostAll = function(template_source, where) {
   var index =  Post.all.indexOf(this);
   var $post = $(template(this));
   $post.attr("data-index", index);
-
+  if (index % 2 != 0){
+    $post.find("div").removeClass("col-sm-5 col-sm-offset-6");
+    $post.find(">div").addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
+    $post.find("div h2").removeClass("secondaryColor").addClass("majorColor");
+    $post.find("div p").removeClass("majorColor").addClass("secondaryColor");
+    $post.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
+  }
      $(where).prepend($post);
 }
 SaveRender.prototype.renderTemplate = function(template_source, where) {
@@ -80,33 +86,33 @@ function postToBlog(){
   event.preventDefault();
 
   if ( !($("body").hasClass("errorInput") ) ){ 
-
-  if ( $titleInput.val() !== "" && $postBody.val()   !== "")
-  {
-    $("body").removeClass("errorInput");
-  var tempPost = new Post($titleInput.val(),$postBody.val() );
-  tempPost.saveToPostAll(tempPost);
-  //console.log("this is posttoBlog tempPost" + tempPost);
-  tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
-  $("#postModal").modal("hide");
-  $modalForm[0].reset();
-  $titleInput.focus();
-  }else{
-    console.log("wrong input values");
-   var $alert = $("<div></div>");
-   $alert.addClass("alert alert-danger");
-   var $close = $("<a></a>");
-   $close.addClass("close");
-   $close.attr("href", "#");
-   $close.attr("data-dismiss", 'alert');
-   $close.attr("aria-label", "close");
-   $close.html("&times;");
-   $alert.html($close);
-   $alert.prepend("Please fill in all the inputs");
-   $(".modal-header").prepend($alert);
-   $("body").addClass("errorInput");
+    console.log($postBody.val() );
+    if ( $titleInput.val() !== "" && $postBody.val() !== "")
+    {
+      $("body").removeClass("errorInput");
+    var tempPost = new Post($titleInput.val(), $postBody.val() );
+    tempPost.saveToPostAll(tempPost);
+    //console.log("this is posttoBlog tempPost" + tempPost);
+    tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
+    $("#postModal").modal("hide");
+    $modalForm[0].reset();
+    $titleInput.focus();
+    }else{
+      console.log("wrong input values");
+     var $alert = $("<div></div>");
+     $alert.addClass("alert alert-danger");
+     var $close = $("<a></a>");
+     $close.addClass("close");
+     $close.attr("href", "#");
+     $close.attr("data-dismiss", 'alert');
+     $close.attr("aria-label", "close");
+     $close.html("&times;");
+     $alert.html($close);
+     $alert.prepend("Please fill in all the inputs");
+     $(".modal-header").prepend($alert);
+     $("body").addClass("errorInput");
+    }
   }
-}
 }
 
 function postFromLocStorage (){
@@ -120,22 +126,51 @@ function postFromLocStorage (){
   $titleInput.focus();
 }
 
-function addComments(post){
+
+
+function addComment(){
   console.log("add a comment");
-  $("#makePostBtn").trigger("click");
 
-  $("div.titleP").addClass("hide");
-  var tempComment = new Comment($titleInput, $postBody); 
-  Comments.all.push(tempComment);
-  $("#postModal").on("submit", function(event){
-    event.preventDefault();
-    console.log("i have been submitted by comments.")
-        $("div.titleP").removeClass("hide");
+  console.log($(this) );
 
-  });
+  var tempComment = new Comment( $("#commentTxt").val() );
+  console.log("#postComment -", $("#commentTxt").val() ); 
+  Comment.all.push(tempComment);
+  console.log("tempComment.body -", tempComment.body)
+  var $commentDiv = $("<div></div>").text(tempComment.body );
+  console.log($commentDiv);
+  console.log($(this).parent());
+  $(this).parent().parent().prepend($commentDiv);
+  // $("#postModal").on("submit", function(event){
+  //   event.preventDefault();
+  //   console.log("i have been submitted by comments.");
+  //       $("div.titleP").removeClass("hide");
+
+  // });
    
 }
+function addCommentFromPost(){
+  console.log("add a comment");
+  $(this).parent().find(".commentForm").removeClass("hide");
+  console.log($(this).parent().find(".commentForm"));
+  //var $commentForm = $("<div><textarea class='cForm'></textarea></div");
+  //$(this).parent().append($commentForm); 
+  // var tempComment = new Comment( $("#commentTxt").val() );
+  // console.log("#postComment -", $("#commentTxt").val() ); 
+  // Comment.all.push(tempComment);
+  // console.log("tempComment.body -", tempComment.body)
+  // var $commentDiv = $("<div></div>").text(tempComment.body );
+  // console.log($commentDiv);
+  // console.log($(this).parent());
+  // $(this).parent().prepend($commentDiv);
+  // $("#postModal").on("submit", function(event){
+  //   event.preventDefault();
+  //   console.log("i have been submitted by comments.");
+  //       $("div.titleP").removeClass("hide");
 
+  // });
+   
+}
 
 //data model
 // var post1 = new Post("1building my blog", "Today we reviewed OOP, not the song by Naughty By Nature but the"+ 
@@ -159,6 +194,7 @@ var post2 = new Post("2finding my community", "In just two weeks of dev school a
 post2.saveToPostAll();
 post2.renderTemplatePostAll("#blog-template", "#blog-container");
  
+
  console.log(Post.all);
 //submit button 
 $modalForm.on("submit", postToBlog);
@@ -168,12 +204,12 @@ $makePostBtn.on("click", function(){
 
 $("button.close").on("click", function(){
   $("body").removeClass("errorInput");
-})
+});
 
 //$modalForm.on("submit", postFromLocStorage);
   
-
-//$("button.comment").on("click", addComments);
+$("button.addComment").on("click", addCommentFromPost);
+//$("#commentModal").on("click", "button", addComment);
 
 });
 

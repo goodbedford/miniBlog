@@ -5,10 +5,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="accentBgColor2">
   <div class="jumbotron text-center">
-    <h1>The Junior Developers Blog</h1>
+    <h1>The <span class="secondaryColor">Junior</span> Developers Blog</h1>
   </div>
+
   <div class="container">
     <div class="row text-center btnRow">
       <button id="makePostBtn" class="btn btn-lg" data-toggle="modal" data-target="#postModal"> make a post</button>
@@ -19,25 +20,28 @@
     </div>
     <!-- underscore template -->
   <script type="text/template" id="blog-template">
-  <div class="row">
-   <div class="col-xs-8 col-xs-offset-2 postBlock">
-     <h2 class="mainColor"><%= title %></h2>
-     <p class="secondaryColor"><%= body %><br /><span class="accentColor"><%= postDate %></span></p>
-    <!--<div class="accentColor"> <button class="comment">Add Comment</button></div> -->
+  <div class="row postRow">
+   <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 postBlockRight">
+     <h2 class="secondaryColor borderBtm"><%= title %></h2>
+     <p class="majorColor"><%= body %><br /><span class="accentColor3 dateBoxRight"><%= postDate %></span></p>
+   <div class="accentColor"> <button class="addComment" data-toggle="" data-target="#commentModal">Add Comment</button></div> 
+     <div class="commentContainer"><textarea class="commentForm hide"></textarea></div>
+
    </div>
+
   </div>
-  </script>
+  </script> 
 
 
-    <!-- Modal -->
+    <!--Post Modal -->
     <div id="postModal" class="modal fade" role="dialog">
       <div class="modal-dialog">
 
         <!-- Modal content-->
         <div class="modal-content">
-          <div class="modal-header text-center mainBgColor">
+          <div class="modal-header text-center majorBgColor">
             <button id="xBtn" type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title secondaryColor">The Junior Developers Blog</h4>
+            <h4 class="modal-title secondaryColor">The <span class="">Junior</span> Developers Blog</h4>
           </div>
           <div class="modal-body">
 
@@ -48,7 +52,7 @@
               </div>
               <div class="form-group">
                 <label for="postBody">Post:</label>
-                <input id="postBody" type="text" class="form-control">
+                <textarea id="postBody"  class="form-control"></textarea>
               </div>
               <button id="submitBtn" type="submit" class="btn btn-default">Submit</button>
             </form>
@@ -60,8 +64,35 @@
         </div>
       </div>
     </div>
-  </div>
 
+    
+      <!-- Comment Modal 
+    <div id="commentModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+  
+        <div class="modal-content">
+          <div class="modal-header text-center majorBgColor">
+            <button id="commentXBtn" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title secondaryColor">The <span class="">Junior</span> Developers Blog</h4>
+          </div>
+  
+          <div class="modal-body">
+            <div>
+                <label for="commentTxt">Comment:</label>
+                <textarea id="commentTxt"></textarea>
+            </div>
+              <button id="commentSubmitBtn" type="button" class="btn btn-default">Submit</button>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div> -->
+
+</<div>
 
 
 

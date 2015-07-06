@@ -256,7 +256,7 @@ $(document).ready(function(){
 
   //$modalForm.on("submit", postFromLocStorage);
     
-  $("#blog-container").on("click", "button.launchComment",addCommentFromPost);
+  $("#blog-container").on("click", "button.launchComment", addCommentFromPost);
   //$("#commentModal").on("click", "button", addComment);
 
   $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){

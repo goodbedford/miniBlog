@@ -78,10 +78,37 @@ button.addCommentLeft{
 .commentBox{
   background-color: white;
   color: #6A351B;
-  border: 1px solid #6A351B;
+  border: 2px solid #6A351B;
   margin-top: 5px;
   padding: 10px;
   border-radius: 15px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 5px solid;
+}
+/*
+.commentBox:before {
+   content:"";
+   position: absolute;
+   right: 100%;
+   top: 10%;
+   width: 0;
+   height: 0;
+   border-top: 15px solid transparent;
+   border-right: 10px solid #6A351B;
+   border-bottom: 15px solid transparent;
+}
+*/  
+.commentBoxLeft{
+  background-color: white;
+  color: #6A351B;
+  border: 2px solid #97A7B2;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 15px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 5px solid #97A7B2;
 }
 .commentForm{
   width: 100%;
@@ -111,6 +138,10 @@ button.addCommentLeft{
   border-top-left-radius: 45px;
   border-bottom-right-radius: 18px;
   padding: 8px;
+}
+.error{
+  color: red;
+  font-size: bold;
 }
 
 .flRight{

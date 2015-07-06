@@ -59,12 +59,19 @@ SaveRender.prototype.renderTemplatePostAll = function(template_source, where) {
   var $post = $(template(this));
   $post.attr("data-index", index);
   if (index % 2 != 0){
-    $post.find("div").removeClass("col-sm-5 col-sm-offset-6");
-    $post.find(">div").addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
+    $post.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
+    $post.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
     $post.find("div h2").removeClass("secondaryColor").addClass("majorColor");
     $post.find("div p").removeClass("majorColor").addClass("secondaryColor");
     $post.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
-  }
+    $post.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
+    $post.find("div").eq(1).find("div div").eq(0).addClass("flRight");
+    $post.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
+
+
+    console.log($("body").children("data-index").length);
+
+  }   // $post.animate({opacity: '0.50'}, 1000);
      $(where).prepend($post);
 }
 SaveRender.prototype.renderTemplate = function(template_source, where) {
@@ -100,7 +107,6 @@ function postToBlog(){
       }
     }else{
       if ( !($("body").hasClass("errorInput") ) ){
-
        console.log("wrong input values");
        var $alert = $("<div ></div>");
        $alert.addClass("alert alert-danger");
@@ -158,21 +164,26 @@ function addComment(){
 function addCommentFromPost(){
   console.log("add a comment");
   $(this).parent().parent().find("div.commentContainer").removeClass("hide");
-  //console.log($(this));
+  console.log($(this));
+
   var $commentRowBox = $(this).parent().parent().parent();
+  console.log("commentRowBox-",$commentRowBox);
+  console.log("data-index-", $commentRowBox.parent().attr("data-index") );
   var $commentContainer = $(this).parent().parent().find("div.commentContainer");
   var $cSubmitBtn = $(this).parent().siblings(".commentContainer").children("button");
   
-  $cSubmitBtn.on("click",function(){
-    var $row = $("<div class='row'></div>");
-    var $col = $("<div class='col-xs-4 col-xs-offset-4 commentBox'></div>");
-    $col.html($commentContainer.children("textarea").val() );
-    $row.html($col);
-        console.log($row.html() );
-    $commentRowBox.append($row );
-    $commentContainer.children("textarea").val("");
-    $commentContainer.addClass("hide");
-  });
+  // $cSubmitBtn.on("click",function(){
+  //   var $row = $("<div class='row'></div>");
+  //   var $col = $("<div class='col-xs-4 col-xs-offset-4 commentBox'></div>");
+  //   $col.html($commentContainer.children("textarea").val() );
+  //   $row.html($col);
+  //   console.log($row.html() );
+  //   console.log("commentRowBox-",$commentRowBox);
+  //   $commentRowBox.append($row );
+  //   $commentContainer.children("textarea").val("");
+  //   $commentContainer.addClass("hide");
+  // });
+
   //console.log($(this).parent().find(".commentContainer").html() );
   //var $commentForm = $("<div><textarea class='cForm'></textarea></div");
   //$(this).parent().append($commentForm); 
@@ -215,7 +226,11 @@ var post2 = new Post("2finding my community", "In just two weeks of dev school a
 post2.saveToPostAll();
 post2.renderTemplatePostAll("#blog-template", "#blog-container");
  
-
+var post3 = new Post("peeling back slack", "Slack has been many things to me, a way to get help, comic relief , a monitoring system, and a friend. It's a call in the night, 'Is there any body out there?...You wait and if your suave you can see who's out there."+
+  "but will anyone help you. Of course they will. Your freaking out and you watch the MIME of the guy slapping a way at the computer until his arms look"+
+  "like a windmill. Thank you Slack. Better yet thank for, whomever on the other end of the Slack. ");
+post3.saveToPostAll();
+post3.renderTemplatePostAll("#blog-template", "#blog-container");
  console.log(Post.all);
 //submit button 
 $modalForm.on("submit", postToBlog);
@@ -229,8 +244,20 @@ $("button.close").on("click", function(){
 
 //$modalForm.on("submit", postFromLocStorage);
   
-$("button.addComment").on("click", addCommentFromPost);
+$("button.launchComment").on("click", addCommentFromPost);
 //$("#commentModal").on("click", "button", addComment);
 
+$("#blog-container").on("click", "button.textAreaBtn",function(){
+  console.log("inside txtAreaBtn");
+  var $row = $("<div class='row'></div>");
+  var $col = $("<div class='col-xs-4 col-xs-offset-4 commentBox'></div>");
+  $col.html($commentContainer.children("textarea").val() );
+  $row.html($col);
+  console.log($row.html() );
+  console.log("commentRowBox-",$commentRowBox);
+  $commentRowBox.append($row );
+  $commentContainer.children("textarea").val("");
+  $commentContainer.addClass("hide");
+});
 });
 

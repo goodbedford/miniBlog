@@ -57,6 +57,24 @@ margin-top-20{
   color: #E9D1B1; 
 }
 
+.btn.txtAreaBtn{
+  vertical-align: top;
+}
+
+button.addCommentRight{
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border: 1px solid #6A351B;
+  color: white;
+  background-color: #6A351B;
+}
+button.addCommentLeft{
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border: 1px solid #97A7B2;
+  color: white;
+  background-color: #97A7B2;
+}
 .commentBox{
   background-color: white;
   color: #6A351B;
@@ -64,6 +82,10 @@ margin-top-20{
   margin-top: 5px;
   padding: 10px;
   border-radius: 15px;
+}
+.commentForm{
+  width: 100%;
+  color: #6A351B;
 }
 .dateBoxLeft{
   position: relative;
@@ -89,6 +111,10 @@ margin-top-20{
   border-top-left-radius: 45px;
   border-bottom-right-radius: 18px;
   padding: 8px;
+}
+
+.flRight{
+  float: right; 
 }
 .jumbotron{
   background-color: #97A7B2;

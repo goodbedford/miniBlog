@@ -26,7 +26,7 @@ accentColor3{
 }
 
 body{
-  /*background-image: url("../gblogo22.png");
+  /*background-image: url("../dark-wood-2.jpg");
   background-size: 50px 50px;*/
 
 }
@@ -40,6 +40,9 @@ h1{
 margin-top-20{
   margin-top: 20px;
 
+}
+#blog-container{
+  top:100px;
 }
 .borderBtm{
   border-bottom: 2px solid;
@@ -148,12 +151,21 @@ button.addCommentLeft{
   float: right; 
 }
 .jumbotron{
+
   background-color: #97A7B2;
   color: #E9D1B1;
   /*border-top: 15px solid #6A351B;*/
   border-bottom: 10px solid #6A351B;
-}
+                        
 
+}
+.jumboWrap{
+    z-index: 1050;
+
+  position: fixed;
+  width:100%;
+  top:0;
+}
 .mainColor{
   color: #330000;
 }
@@ -208,6 +220,11 @@ button.addCommentLeft{
    border-left: 30px solid #97A7B2;
    border-right: 0;
    border-bottom: 20px solid transparent;
+}
+
+.relTop{
+  position: relative;
+  top:270px;
 }
 .strike{
   text-decoration: line-through;

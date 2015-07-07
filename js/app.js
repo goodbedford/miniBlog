@@ -234,6 +234,9 @@ $(document).ready(function(){
 
   var post2 = new Post("2finding my community", "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love.");
   post2.saveToPostAll();
+  var com1 = new Comment("That was a pretty good post, thanks man.");
+  var com2 = new Comment("this post is out date we don't use underscore or OOP anymore");
+  post2.comments.push(com1, com2);
   post2.renderTemplatePostAll("#blog-template", "#blog-container");
    
   var post3 = new Post("peeling back slack", "Slack has been many things to me, a way to get help, comic relief , a monitoring system, and a friend. It's a call in the night, 'Is there any body out there?...You wait and if your suave you can see who's out there."+
@@ -288,6 +291,12 @@ $(document).ready(function(){
       $commentContainer.removeClass("errorInput");
       $commentContainer.find("div.error").remove(); 
       $col.html($commentContainer.children("textarea").val() );
+      var tempCommentVal = $commentContainer.children("textarea").val();
+      var comment1 = new Comment(tempCommentVal);
+      console.log("HI Yall");
+      Post.all[index].comments.push(comment1);
+      console.log(Post.all[index] );
+
       $row.html($col);
       console.log($row.html() );
       console.log("commentRowBox-",$commentRowBox);

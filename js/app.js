@@ -262,49 +262,99 @@ $(document).ready(function(){
   $("#blog-container").on("click", "button.launchComment", addCommentFromPost);
   //$("#commentModal").on("click", "button", addComment);
 
-  $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
-    var $commentRowBox = $(this).parent().parent().parent();
-    console.log("commentRowBox-",$commentRowBox);
-    console.log("data-index-", $commentRowBox.parent().attr("data-index") );
-    var index = $commentRowBox.parent().attr("data-index");
-    var $commentContainer = $(this).parent().parent().find("div.commentContainer");
-    var $cSubmitBtn = $(this).parent().siblings(".commentContainer").children("button");
-    console.log("inside txtAreaBtn");
-    var $row = $("<div class='row'></div>");
-    var $col = null;
-    if(index % 2 == 0){
-      $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'></div>");
-    }else{
-      $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-pull-3 commentBoxLeft'></div>");
+  //submit comment textarea to comment container
+  // $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
+  //   var $commentRowBox = $(this).parent().parent().parent();
+  //   console.log("commentRowBox-",$commentRowBox);
+  //   console.log("data-index-", $commentRowBox.parent().attr("data-index") );
+  //   var index = $commentRowBox.parent().attr("data-index");
+  //   var $commentContainer = $(this).parent().parent().find("div.commentContainer");
+  //   var $cSubmitBtn = $(this).parent().siblings(".commentContainer").children("button");
+  //   console.log("inside txtAreaBtn");
+  //   var $row = $("<div class='row'></div>");
+  //   var $col = null;
+  //   if(index % 2 == 0){
+  //     $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'></div>");
+  //   }else{
+  //     $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-pull-3 commentBoxLeft'></div>");
 
-    }
-    //var $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7  commentBox'></div>");
-    //console.log($commentContainer.children("textarea").val() );
-    if ($commentContainer.children("textarea").val() == ""){
-      console.log("textarea is empty");
-      if(!$commentContainer.hasClass("errorInput") ){
-         $commentContainer.addClass("errorInput");
-         $commentContainer.prepend($("<div class='error'>Please enter Comment</div>") );
-      }
+  //   }
+  //   //var $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7  commentBox'></div>");
+  //   //console.log($commentContainer.children("textarea").val() );
+  //   if ($commentContainer.children("textarea").val() == ""){
+  //     console.log("textarea is empty");
+  //     if(!$commentContainer.hasClass("errorInput") ){
+  //        $commentContainer.addClass("errorInput");
+  //        $commentContainer.prepend($("<div class='error'>Please enter Comment</div>") );
+  //     }
 
-    }else{
-      $commentContainer.removeClass("errorInput");
-      $commentContainer.find("div.error").remove(); 
-      $col.html($commentContainer.children("textarea").val() );
-      var tempCommentVal = $commentContainer.children("textarea").val();
-      var comment1 = new Comment(tempCommentVal);
-      console.log("HI Yall");
-      Post.all[index].comments.push(comment1);
-      console.log(Post.all[index] );
+  //   }else{
+  //     $commentContainer.removeClass("errorInput");
+  //     $commentContainer.find("div.error").remove(); 
+  //     $col.html($commentContainer.children("textarea").val() );
+  //     var tempCommentVal = $commentContainer.children("textarea").val();
+  //     var comment1 = new Comment(tempCommentVal);
+  //     console.log("HI Yall");
+  //     Post.all[index].comments.push(comment1);
+  //     console.log(Post.all[index] );
 
-      $row.html($col);
-      console.log($row.html() );
-      console.log("commentRowBox-",$commentRowBox);
-      $commentRowBox.append($row );
-      $commentContainer.children("textarea").val("");
-      $commentContainer.addClass("hide");
-    }
-  });
+  //     $row.html($col);
+  //     console.log($row.html() );
+  //     console.log("commentRowBox-",$commentRowBox);
+  //     $commentRowBox.append($row );
+  //     $commentContainer.children("textarea").val("");
+  //     $commentContainer.addClass("hide");
+  //   }
+  // });
+
+//setting up container template
+$("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
+  var $commentRowBox = $(this).parent().parent().parent();
+  console.log("commentRowBox-",$commentRowBox);
+  console.log("data-index-", $commentRowBox.parent().attr("data-index") );
+  var $comTarget = $commentRowBox.parent().find('div[class="comment-target"]');
+  var  sidePicker = $commentRowBox.parent().attr("data-index");
+  var postIndex = sidePicker;
+  var $commentContainer =$(this).parent().find("textarea:first");
+  console.log($comTarget.attr("id"));
+  //var targetId = $commentRowBox.parent().find('div[class="comment-target"]').attr("id");
+  var $row = $("<div class='row'></div>");
+       var $col = null;
+       if(sidePicker % 2 == 0){
+         $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'></div>");
+       }else{
+         $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-pull-3 commentBoxLeft'></div>");
+
+       }
+
+       if ($commentContainer.val() == ""){
+         console.log("textarea is empty");
+         if(!$commentContainer.hasClass("errorInput") ){
+            $commentContainer.addClass("errorInput");
+            $commentContainer.prepend($("<div class='error'>Please enter Comment</div>") );
+         }
+
+       }else{
+         $commentContainer.removeClass("errorInput");
+         $commentContainer.find("div.error").remove(); 
+         $col.html($commentContainer.val() );
+         var tempCommentVal = $commentContainer.val();
+         var comment1 = new Comment(tempCommentVal);
+         console.log("HI Yall");
+         Post.all[postIndex].comments.push(comment1);
+         console.log(Post.all[postIndex] );
+
+         $row.html($col);
+         console.log($row.html() );
+         console.log("commentRowBox-",$commentRowBox);
+         $commentRowBox.append($row );
+         $commentContainer.val("");
+         $commentContainer.addClass("hide");
+       }
+
+});
+
+
   $("#blog-container").on("click", "button.btn.txtAreaClose", function(){
     if($(this).parent().hasClass("errorInput") ){
       $(this).parent().removeClass("errorInput");

@@ -37,7 +37,8 @@
             <div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'><%= commentItem.body %></div>
             </div>
           <% }); %>
-    </div> 
+    </div>
+      <div id=<%= _.uniqueId('comment-container-')%> class="comment-target" </div>
   </div>
   </script> 
 <!-- comment template -->

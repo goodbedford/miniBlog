@@ -40,27 +40,31 @@ $(document).ready(function(){
   }
   Comment.all =[];
 
-  Comment.prototype.renderTemplateComment = function(template_source, whereId, $post) {
+  Comment.prototype.renderTemplateComment = function(template_source, whereId, $postSelector) {
     var template = _.template($(template_source).html());
     //var index =  Post.all.indexOf(this);
     var $comment = $(template(this));
-    var index = $post.attr("data-index");
-    console.log("the comment object is", $comment.html());
+    var index = $postSelector.attr("data-index");
+    //console.log("this is postSelector");
+    //console.log( $postSelector);
+    //console.log("the comment object is", $comment.html());
     //$post.attr("data-index", index);
     if (index % 2 != 0){
-      $post.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
-      $post.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
-      $post.find("div h2").removeClass("secondaryColor").addClass("majorColor");
-      $post.find("div p").removeClass("majorColor").addClass("secondaryColor");
-      $post.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
-      $post.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
-      $post.find("div").eq(1).find("div div").eq(0).addClass("flRight");
-      $post.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
-
-      console.log($("body").children("data-index").length);
-
-    }   // $post.animate({opacity: '0.50'}, 1000);
+      styleLeftPost($postSelector);
+      //console.log($("body").children("data-index").length);
+    } 
        $(whereId).prepend($comment);
+
+       function styleLeftPost( postSelector){
+        postSelector.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
+        postSelector.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
+        postSelector.find("div h2").removeClass("secondaryColor").addClass("majorColor");
+        postSelector.find("div p").removeClass("majorColor").addClass("secondaryColor");
+        postSelector.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
+        postSelector.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
+        postSelector.find("div").eq(1).find("div div").eq(0).addClass("flRight");
+        postSelector.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
+       }
   }
   function SaveRender(){}
 

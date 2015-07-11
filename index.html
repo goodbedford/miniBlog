@@ -42,17 +42,15 @@
   </div>
   </script> 
 <!-- comment template -->
-  <script type="text/template" id="blog-template">
+  <script type="text/template" id="comment-template">
     <div class="row">
       <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 ">
         <div class="accentColor"> <button class="launchComment addCommentRight" data-toggle="" data-target="#commentModal">Add Comment</button></div> 
         <div class="commentContainer hide"><textarea class="commentForm "></textarea><button class="btn txtAreaBtn">Submit</submit><button class="btn txtAreaClose">Close</button></div>
       </div>
-          <% comments.forEach(function(commentItem){ %>
             <div class="row"> 
-            <div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'><%= commentItem.body %></div>
+            <div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'><%= body %></div>
             </div>
-          <% }); %>
     </div> 
   </script>
 

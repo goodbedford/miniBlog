@@ -35,6 +35,27 @@ $(document).ready(function(){
   }
   Comment.all =[];
 
+  Comment.prototype.renderTemplateComment = function(template_source, where, $post) {
+    var template = _.template($(template_source).html());
+    //var index =  Post.all.indexOf(this);
+    var $comment = $(template(this));
+    var index = $post.attr("data-index");
+    //$post.attr("data-index", index);
+    if (index % 2 != 0){
+      $post.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
+      $post.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
+      $post.find("div h2").removeClass("secondaryColor").addClass("majorColor");
+      $post.find("div p").removeClass("majorColor").addClass("secondaryColor");
+      $post.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
+      $post.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
+      $post.find("div").eq(1).find("div div").eq(0).addClass("flRight");
+      $post.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
+
+      console.log($("body").children("data-index").length);
+
+    }   // $post.animate({opacity: '0.50'}, 1000);
+       $(where).prepend($comment);
+  }
   function SaveRender(){}
 
   SaveRender.prototype.saveToLs = function(post){ 
@@ -313,10 +334,14 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
   console.log("commentRowBox-",$commentRowBox);
   console.log("data-index-", $commentRowBox.parent().attr("data-index") );
   var $comTarget = $commentRowBox.parent().find('div[class="comment-target"]');
+  var $postRow = $commentRowBox.parent();
   var  sidePicker = $commentRowBox.parent().attr("data-index");
   var postIndex = sidePicker;
-  var $commentContainer =$(this).parent().find("textarea:first");
+  var $txtAreaBox =$(this).parent().find("textarea:first");
+  var $commentContainer = $txtAreaBox.parent();
+  var comTargetId = $comTarget.attr("id");
   console.log($comTarget.attr("id"));
+   console.log("this shuld be ",comTargetId )
   //var targetId = $commentRowBox.parent().find('div[class="comment-target"]').attr("id");
   var $row = $("<div class='row'></div>");
        var $col = null;
@@ -327,19 +352,22 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
 
        }
 
-       if ($commentContainer.val() == ""){
+       if ($txtAreaBox.val() == ""){
          console.log("textarea is empty");
-         if(!$commentContainer.hasClass("errorInput") ){
-            $commentContainer.addClass("errorInput");
-            $commentContainer.prepend($("<div class='error'>Please enter Comment</div>") );
+         if(!$txtAreaBox.hasClass("errorInput") ){
+            $txtAreaBox.addClass("errorInput");
+            $txtAreaBox.prepend($("<div class='error'>Please enter Comment</div>") );
          }
 
        }else{
-         $commentContainer.removeClass("errorInput");
-         $commentContainer.find("div.error").remove(); 
-         $col.html($commentContainer.val() );
-         var tempCommentVal = $commentContainer.val();
+         $txtAreaBox.removeClass("errorInput");
+         $txtAreaBox.find("div.error").remove(); 
+         $col.html($txtAreaBox.val() );
+         var tempCommentVal = $txtAreaBox.val();
          var comment1 = new Comment(tempCommentVal);
+
+         comment1.renderTemplateComment("#comment-template", comTargetId, $postRow );
+         console.log("I just added comment to post", postIndex)
          console.log("HI Yall");
          Post.all[postIndex].comments.push(comment1);
          console.log(Post.all[postIndex] );
@@ -348,7 +376,7 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
          console.log($row.html() );
          console.log("commentRowBox-",$commentRowBox);
          $commentRowBox.append($row );
-         $commentContainer.val("");
+         $txtAreaBox.val("");
          $commentContainer.addClass("hide");
        }
 

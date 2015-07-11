@@ -1,3 +1,5 @@
+//Client Side js
+
 $(document).ready(function(){
 
   var $submitBtn = $("#submitBtn");
@@ -7,6 +9,7 @@ $(document).ready(function(){
   var $makePostBtn =$("#makePostBtn");
   //Post constructor
   function Post (title, body){
+
     console.log("started making new post");
     this.title = title;
     this.body = body;
@@ -19,9 +22,11 @@ $(document).ready(function(){
     var d = new Date();
     return d.toLocaleDateString();
     }
+
   }
   //
   Post.all =[];
+
 
   function Comment(body){
     this.body = body;
@@ -35,11 +40,12 @@ $(document).ready(function(){
   }
   Comment.all =[];
 
-  Comment.prototype.renderTemplateComment = function(template_source, where, $post) {
+  Comment.prototype.renderTemplateComment = function(template_source, whereId, $post) {
     var template = _.template($(template_source).html());
     //var index =  Post.all.indexOf(this);
     var $comment = $(template(this));
     var index = $post.attr("data-index");
+    console.log("the comment object is", $comment.html());
     //$post.attr("data-index", index);
     if (index % 2 != 0){
       $post.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
@@ -54,7 +60,7 @@ $(document).ready(function(){
       console.log($("body").children("data-index").length);
 
     }   // $post.animate({opacity: '0.50'}, 1000);
-       $(where).prepend($comment);
+       $(whereId).prepend($comment);
   }
   function SaveRender(){}
 
@@ -154,9 +160,11 @@ $(document).ready(function(){
 
   var post2 = new Post("2finding my community", "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love.");
   post2.saveToPostAll();
-  var com1 = new Comment("That was a pretty good post, thanks man.");
-  var com2 = new Comment("this post is out date we don't use underscore or OOP anymore");
-  post2.comments.push(com1, com2);
+  //var com1 = new Comment("That was a pretty good post, thanks man.");
+  //var com2 = new Comment("this post is out date we don't use underscore or OOP anymore");
+  //post2.comments.push(com1, com2);
+  //com1.renderTemplateComment("#comment-template", "#comment-target", );
+  //com2.renderTemplateComment;
   post2.renderTemplatePostAll("#blog-template", "#blog-container");
    
   var post3 = new Post("peeling back slack", "Slack has been many things to me, a way to get help, comic relief , a monitoring system, and a friend. It's a call in the night, 'Is there any body out there?...You wait and if your suave you can see who's out there."+
@@ -164,7 +172,7 @@ $(document).ready(function(){
     "like a windmill. Thank you Slack. Better yet thank for, whomever on the other end of the Slack. ");
   post3.saveToPostAll();
   post3.renderTemplatePostAll("#blog-template", "#blog-container");
-   console.log(Post.all);
+   console.log(Post.all);    
 
 
   //submit button 
@@ -196,7 +204,7 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
   var $commentContainer = $txtAreaBox.parent();
   var comTargetId = $comTarget.attr("id");
   console.log($comTarget.attr("id"));
-   console.log("this shuld be ",comTargetId )
+   console.log("this should be ",comTargetId );
   //var targetId = $commentRowBox.parent().find('div[class="comment-target"]').attr("id");
   var $row = $("<div class='row'></div>");
        var $col = null;

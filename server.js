@@ -1,3 +1,5 @@
+//Server side js
+
 // require express framework and additional modules
 var express = require('express'),
     app = express(),
@@ -7,26 +9,28 @@ var express = require('express'),
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
 
-var users = [
-  {
-    name: 'Bob',
-    username: 'bobiscool'
-  },
-  {
-    name: 'Julie',
-    username: 'julierocks'
-  }
-];
+
+
+//set up sample data model
+
+
 
 // set up root route to respond with 'hello world'
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/public/views/index.html');
 });
 
-// set up route for /users JSON
+// set up route for /posts JSON
 app.get('/api/posts', function(req, res) {
-  res.json(users);
+  res.json(posts);
 });
+
+// set up route for /posts/:postId JSON
+app.get('/api/posts/:postId', function(req, res) {
+  res.json(posts);
+});
+
+
 
 
 // listen on port 3000

@@ -22,7 +22,7 @@
     </div>
     <!-- underscore Post template -->
   <script type="text/template" id="blog-template">
-  <div id="<%= _.uniqueId('post_')%>" class="row postRow">
+  <div class="row postRow">
     <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 postBlockRight">
       <h2 class="secondaryColor borderBtm"><%= title %></h2>
       <p class="majorColor"><%= body %><br /><span class="accentColor3 dateBoxRight"><%= postDate %></span></p>
@@ -36,9 +36,9 @@
             <div class="row"> 
             <div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'><%= commentItem.body %></div>
             </div>
-          <% }); %>
+          <% }); %>  
     </div>
-      <div id=<%= _.uniqueId('comment-container-')%> class="comment-target" </div>
+      <div id=<%= _.uniqueId('comment-container-')%> class="comment-target" ></div>
   </div>
   </script> 
 <!-- comment template -->

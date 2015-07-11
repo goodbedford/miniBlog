@@ -50,12 +50,12 @@ $(document).ready(function(){
     //console.log("the comment object is", $comment.html());
     //$post.attr("data-index", index);
     if (index % 2 != 0){
-      styleLeftPost($postSelector);
+      styleLeftComment($postSelector);
       //console.log($("body").children("data-index").length);
     } 
        $(whereId).prepend($comment);
 
-       function styleLeftPost( postSelector){
+       function styleLeftComment( postSelector){
         postSelector.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
         postSelector.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
         postSelector.find("div h2").removeClass("secondaryColor").addClass("majorColor");
@@ -78,20 +78,24 @@ $(document).ready(function(){
     var $post = $(template(this));
     $post.attr("data-index", index);
     if (index % 2 != 0){
-      $post.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
-      $post.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
-      $post.find("div h2").removeClass("secondaryColor").addClass("majorColor");
-      $post.find("div p").removeClass("majorColor").addClass("secondaryColor");
-      $post.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
-      $post.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
-      $post.find("div").eq(1).find("div div").eq(0).addClass("flRight");
-      $post.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
+     styleLeftPost($post);
 
 
       console.log($("body").children("data-index").length);
 
     }   // $post.animate({opacity: '0.50'}, 1000);
        $(where).prepend($post);
+
+    function styleLeftPost(somePost){
+       somePost.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
+      somePost.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
+      somePost.find("div h2").removeClass("secondaryColor").addClass("majorColor");
+      somePost.find("div p").removeClass("majorColor").addClass("secondaryColor");
+      somePost.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
+      somePost.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
+      somePost.find("div").eq(1).find("div div").eq(0).addClass("flRight");
+      somePost.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
+    }
   }
 
 
@@ -108,7 +112,7 @@ $(document).ready(function(){
       { 
         if( !$("body").hasClass("errorInput")) {
           $("body").removeClass("errorInput");
-          var tempPost = new Post($titleInput.val(), $postBody.val() );
+          var tempPost = new Post($titleInput.val(), $postBody.val().replace(/\n/gi, "<br />") );
           tempPost.saveToPostAll(tempPost);
           //console.log("this is posttoBlog tempPost" + tempPost);
           tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
@@ -229,7 +233,7 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
        }else{
          $txtAreaBox.removeClass("errorInput");
          $txtAreaBox.find("div.error").remove(); 
-         $col.html($txtAreaBox.val() );
+         $col.html($txtAreaBox.val().replace(/\n/gi, "<br />") );
          var tempCommentVal = $txtAreaBox.val();
          var comment1 = new Comment(tempCommentVal);
 

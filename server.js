@@ -102,7 +102,7 @@ app.delete("/api/posts/:postId", function(req, res){
   var postId = req.params.postId;
   var index;
   posts.forEach(function(post){
-    if(post.id == id){
+    if(post.id == postId){
       index = posts.indexOf(post);
       posts.slice(index,1);
       res.json({msg: "successful deletion of postId-" + postId});

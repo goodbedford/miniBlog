@@ -67,28 +67,29 @@ $(document).ready(function(){
         postSelector.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
        }
   }
-  function SaveRender(){}
 
-  SaveRender.prototype.saveToPostAll = function(){
+  Post.prototype.save = function(){
     Post.all.push(this);
   }
 
-  SaveRender.prototype.renderTemplatePostAll = function(template_source, where) {
+  Post.prototype.render = function(template_source, where) {
     var template = _.template($(template_source).html());
     //var index =  Post.all.indexOf(this);
     var index = this.id;
-    var $post = $(template(this));
+    var $postHtml = $(template(this));
+    console.log("this is the posthtml--");
+    console.log($postHtml);
     console.log("the this.id-");
     console.log(index);
-    $post.attr("data-index", index);
+    $postHtml.attr("data-index", index);
     if (index % 2 != 0){
-     styleLeftPost($post);
+     styleLeftPost($postHtml);
 
 
       console.log($("body").children("data-index").length);
 
-    }   // $post.animate({opacity: '0.50'}, 1000);
-       $(where).prepend($post);
+    }   // $postHtml.animate({opacity: '0.50'}, 1000);
+       $(where).prepend($postHtml);
 
     function styleLeftPost(somePost){
        somePost.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6");
@@ -103,7 +104,7 @@ $(document).ready(function(){
   }
 
 
-  Post.prototype = new SaveRender();
+  Post.prototype = new Post();
   Post.prototype.constructor = Post;
 
 
@@ -117,7 +118,7 @@ $(document).ready(function(){
         if( !$("body").hasClass("errorInput")) {
           $("body").removeClass("errorInput");
           var tempPost = {title:$titleInput.val(), body: $postBody.val().replace(/\n/gi, "<br />")};
-          //tempPost.saveToPostAll(tempPost);
+          //tempPost.save(tempPost);
 
           //ajax post info to server
           $.ajax({
@@ -126,14 +127,14 @@ $(document).ready(function(){
             data: tempPost,
             success: function(data){
               var newPost = new Post(data.id, data.title, data.body );
-              newPost.saveToPostAll();
-              newPost.renderTemplatePostAll("#blog-template", "#blog-container");
+              newPost.save();
+              newPost.render("#blog-template", "#blog-container");
 
             }
           });
 
           //console.log("this is posttoBlog tempPost" + tempPost);
-          //tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
+          //tempPost.render("#blog-template", "#blog-container");
           $("#postModal").modal("hide");
           $modalForm[0].reset();
           $titleInput.focus();
@@ -175,29 +176,29 @@ $(document).ready(function(){
   //                          "Poop on grasses shake treat bag, or put toy mouse in food bowl run out of litter box at full speed"+
   //                           "so chase mice, or kick up litter. Sit in box chew on cable but hopped up on catnip, so eat grass,"+
   //                           " throw it back up hunt by meowing loudly at 5am next to human slave food dispenser spread kitty litter all over house if it fits, i sits. ");
-  // post4.saveToPostAll();
-  // post4.renderTemplatePostAll("#blog-template", "#blog-container");
+  // post4.save();
+  // post4.render("#blog-template", "#blog-container");
   
   // var post1 = new Post("1building my blog", "Today we reviewed OOP, not the song by Naughty By Nature but the"+ 
   //   "object oriented programming. We covered inheretance. We used localStorage to temperaily store post unitl we learn"+
   //   "how to use databases. We used underscore for the template and other utilites.");
-  // post1.saveToPostAll();
-  // post1.renderTemplatePostAll("#blog-template", "#blog-container");
+  // post1.save();
+  // post1.render("#blog-template", "#blog-container");
 
   // var post2 = new Post("2finding my community", "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love.");
-  // post2.saveToPostAll();
+  // post2.save();
   // //var com1 = new Comment("That was a pretty good post, thanks man.");
   // //var com2 = new Comment("this post is out date we don't use underscore or OOP anymore");
   // //post2.comments.push(com1, com2);
   // //com1.renderTemplateComment("#comment-template", "#comment-target", );
   // //com2.renderTemplateComment;
-  // post2.renderTemplatePostAll("#blog-template", "#blog-container");
+  // post2.render("#blog-template", "#blog-container");
    
   // var post3 = new Post("peeling back slack", "Slack has been many things to me, a way to get help, comic relief , a monitoring system, and a friend. It's a call in the night, 'Is there any body out there?...You wait and if your suave you can see who's out there."+
   //   "but will anyone help you. Of course they will. Your freaking out and you watch the MIME of the guy slapping a way at the computer until his arms look"+
   //   "like a windmill. Thank you Slack. Better yet thank for, whomever on the other end of the Slack. ");
-  // post3.saveToPostAll();
-  // post3.renderTemplatePostAll("#blog-template", "#blog-container");
+  // post3.save();
+  // post3.render("#blog-template", "#blog-container");
   //  console.log(Post.all);    
 
 
@@ -217,7 +218,7 @@ $(document).ready(function(){
   //$("#commentModal").on("click", "button", addComment);
 
 
-//setting up container template
+//setting up comment container template
 $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
   var $commentRowBox = $(this).parent().parent().parent();
   console.log("commentRowBox-",$commentRowBox);
@@ -271,9 +272,12 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
 
 });
   
+  // open edit modal when you click button with clas editPostBtn
   $("#blog-container").on("click", "button.editPostBtn", function(){
     console.log("I just clicked and made the edit modal open");
-    var postId = $(this).parent().parent().parent().attr("data-index");
+    var $postRowParent = $(this).parent().parent().parent();
+    //var $postDataHook = $(this).closet("data-hook", "postTitle");
+    var postId = $postRowParent.attr("data-index");
     console.log("the postId is");
     console.log(postId);
 
@@ -282,22 +286,47 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
       type: "GET",
       success: function(data){
         $("#editTitleInput").val(data.title);
+        $("#editTitleInput").attr("data-index", postId);
         $("#editPostBody").val(data.body);
       }
 
     });
-    $.ajax({
-      var editedPost = {title: $("#editTitleInput").val(), body: $("editPostBody").val() }
-      url: "/api/posts/"+ postId,
-      tye: "PUT",
+    // var editedPost = { title: $("#editTitleInput").val(), body: $("#editPostBody").val() };
+
+
+  });
+  $("#modalEditForm").on("click", ".editSubmitBtn", function(event){
+    event.preventDefault();
+    var editedPost = { id: parseInt($("#editTitleInput").attr("data-index")),
+                       title: $("#editTitleInput").val(), 
+                       body: $("#editPostBody").val() 
+                     };
+    console.log("this is it");
+    console.log(editedPost);
+    // ajax to post id
+    $.ajax({        
+      url: "/api/posts/"+ editedPost.id,
+      type: "PUT",
       data: editedPost,
       success: function(data){
-        
+
+        Post.all.forEach(function(post){
+          if(post.id == data.id){
+            post.title = data.title;
+            post.body = data.body;            
+            var $tempPost = $("#blog-container").find("div[data-index='"+post.id+"']");
+            $tempPost.find("[data-hook='postTitle']").text(post.title);
+            //console.log("in update response.")
+            //console.log($tempPost.find("[data-hook='postTitle']"));
+            //console.log($tempPost.find("[data-hook='postBody']").text(post.body));
+            $tempPost.find("[data-hook='postBody']").text(post.body);
+
+          }
+        });
+        $("#closeEditBtn").trigger("click");
       }
-    })
-
-
-  })
+    });
+  });
 
   $("#blog-container").on("click", "button.btn.txtAreaClose", function(){
     if($(this).parent().hasClass("errorInput") ){
@@ -317,8 +346,8 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
         console.log("this just posted from ajax");
         console.log(post);
         var newPost = new Post(post.id, post.title, post.body);
-        newPost.saveToPostAll();
-        newPost.renderTemplatePostAll("#blog-template", "#blog-container");
+        newPost.save();
+        newPost.render("#blog-template", "#blog-container");
 
       });
     },

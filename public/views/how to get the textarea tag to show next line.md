@@ -1,0 +1,1 @@
+how to get the textarea tag to show next line , I can only write in the textarea and if i hit enter and go to the next line it doesn't represent that in when I post it in a div

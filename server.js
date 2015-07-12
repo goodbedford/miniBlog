@@ -3,12 +3,14 @@
 // require express framework and additional modules
 var express = require('express'),
     app = express(),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    cors = require('cors');
+
 
 // tell app to use bodyParser middleware
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
-
+app.use(cors());
 
 
 //set up sample data model
@@ -30,11 +32,17 @@ var post2 = { id:2,
 //add post to posts array
 posts.push(post1, post2);                      
 
+// fix use for local
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  next();
+});
 
 // set up root route to respond with 'hello world'
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/public/views/index.html');
 });
+
 
 // set up route for /posts JSON
 app.get('/api/posts', function(req, res) {
@@ -46,15 +54,19 @@ app.get('/api/posts', function(req, res) {
 // set up route for /posts/:postId JSON
 app.get('/api/posts/:postId', function(req, res) {
   var index;
+
+  //console.log(req)
+
   posts.forEach(function(post){
+    console.log("post-Id---", post.id)
     if(post.id == req.params.postId){
-      index = posts.indexOf(post);
-      res.status(200).json(post);
+      //index = posts.indexOf(post);
+      console.log(post)
+      res.json(post);
+    }else{
+      console.log("didn't find postId-", req.params.postId);
     }
   });
-  console.log("didn't find postId-", req.params.postId);
-
-  res.json(posts);
 });
 
 
@@ -66,7 +78,26 @@ app.post('/api/posts', function(req, res){
 
   res.status(201).json(newPost);
 
-})
+});
+
+app.put("/api/posts/:postId", function(req, res){
+  var id = req.params.postId;
+ var updatedPost = req.body;
+ console.log("put post id----");
+  console.log(req)
+  var foundPost;
+  posts.forEach(function(post){
+    if(post.id == id){
+      foundPost = post;
+    }
+  });
+    foundPost.id = req.body.id;
+    foundPost.title = req.body.title;
+    foundPost.body = req.body.body;
+    
+    res.json(foundPost);
+
+});
 
 
 // listen on port 3000

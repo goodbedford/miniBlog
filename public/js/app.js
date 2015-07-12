@@ -8,9 +8,10 @@ $(document).ready(function(){
   var $modalForm = $("#modalForm");
   var $makePostBtn =$("#makePostBtn");
   //Post constructor
-  function Post (title, body){
+  function Post (id,title, body){
 
     console.log("started making new post");
+    this.id = id;
     this.title = title;
     this.body = body;
     this.postDate = dateFormat();
@@ -74,8 +75,11 @@ $(document).ready(function(){
 
   SaveRender.prototype.renderTemplatePostAll = function(template_source, where) {
     var template = _.template($(template_source).html());
-    var index =  Post.all.indexOf(this);
+    //var index =  Post.all.indexOf(this);
+    var index = this.id;
     var $post = $(template(this));
+    console.log("the this.id-");
+    console.log(index);
     $post.attr("data-index", index);
     if (index % 2 != 0){
      styleLeftPost($post);
@@ -112,10 +116,24 @@ $(document).ready(function(){
       { 
         if( !$("body").hasClass("errorInput")) {
           $("body").removeClass("errorInput");
-          var tempPost = new Post($titleInput.val(), $postBody.val().replace(/\n/gi, "<br />") );
-          tempPost.saveToPostAll(tempPost);
+          var tempPost = {title:$titleInput.val(), body: $postBody.val().replace(/\n/gi, "<br />")};
+          //tempPost.saveToPostAll(tempPost);
+
+          //ajax post info to server
+          $.ajax({
+            url: "/api/posts",
+            type: "POST",
+            data: tempPost,
+            success: function(data){
+              var newPost = new Post(data.id, data.title, data.body );
+              newPost.saveToPostAll();
+              newPost.renderTemplatePostAll("#blog-template", "#blog-container");
+
+            }
+          });
+
           //console.log("this is posttoBlog tempPost" + tempPost);
-          tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
+          //tempPost.renderTemplatePostAll("#blog-template", "#blog-container");
           $("#postModal").modal("hide");
           $modalForm[0].reset();
           $titleInput.focus();
@@ -150,37 +168,37 @@ $(document).ready(function(){
   }
 
   //data model
-  var post4 = new Post("Find empty spot in cupboard and sleep all day scratch leg; meow for can opener to feed me",
-                          "Sun bathe burrow under covers. Why must they do that fall over dead (not really but gets sypathy)"+
-                           "so curl into a furry donut, or play time, and mew. Need to chase tail plan steps for world domination"+
-                           "eat a plant, kill a hand for nap all day. Has closed eyes but still sees you. Sleep on keyboard."+
-                           "Poop on grasses shake treat bag, or put toy mouse in food bowl run out of litter box at full speed"+
-                            "so chase mice, or kick up litter. Sit in box chew on cable but hopped up on catnip, so eat grass,"+
-                            " throw it back up hunt by meowing loudly at 5am next to human slave food dispenser spread kitty litter all over house if it fits, i sits. ");
-  post4.saveToPostAll();
-  post4.renderTemplatePostAll("#blog-template", "#blog-container");
+  // var post4 = new Post("Find empty spot in cupboard and sleep all day scratch leg; meow for can opener to feed me",
+  //                         "Sun bathe burrow under covers. Why must they do that fall over dead (not really but gets sypathy)"+
+  //                          "so curl into a furry donut, or play time, and mew. Need to chase tail plan steps for world domination"+
+  //                          "eat a plant, kill a hand for nap all day. Has closed eyes but still sees you. Sleep on keyboard."+
+  //                          "Poop on grasses shake treat bag, or put toy mouse in food bowl run out of litter box at full speed"+
+  //                           "so chase mice, or kick up litter. Sit in box chew on cable but hopped up on catnip, so eat grass,"+
+  //                           " throw it back up hunt by meowing loudly at 5am next to human slave food dispenser spread kitty litter all over house if it fits, i sits. ");
+  // post4.saveToPostAll();
+  // post4.renderTemplatePostAll("#blog-template", "#blog-container");
   
-  var post1 = new Post("1building my blog", "Today we reviewed OOP, not the song by Naughty By Nature but the"+ 
-    "object oriented programming. We covered inheretance. We used localStorage to temperaily store post unitl we learn"+
-    "how to use databases. We used underscore for the template and other utilites.");
-  post1.saveToPostAll();
-  post1.renderTemplatePostAll("#blog-template", "#blog-container");
+  // var post1 = new Post("1building my blog", "Today we reviewed OOP, not the song by Naughty By Nature but the"+ 
+  //   "object oriented programming. We covered inheretance. We used localStorage to temperaily store post unitl we learn"+
+  //   "how to use databases. We used underscore for the template and other utilites.");
+  // post1.saveToPostAll();
+  // post1.renderTemplatePostAll("#blog-template", "#blog-container");
 
-  var post2 = new Post("2finding my community", "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love.");
-  post2.saveToPostAll();
-  //var com1 = new Comment("That was a pretty good post, thanks man.");
-  //var com2 = new Comment("this post is out date we don't use underscore or OOP anymore");
-  //post2.comments.push(com1, com2);
-  //com1.renderTemplateComment("#comment-template", "#comment-target", );
-  //com2.renderTemplateComment;
-  post2.renderTemplatePostAll("#blog-template", "#blog-container");
+  // var post2 = new Post("2finding my community", "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love.");
+  // post2.saveToPostAll();
+  // //var com1 = new Comment("That was a pretty good post, thanks man.");
+  // //var com2 = new Comment("this post is out date we don't use underscore or OOP anymore");
+  // //post2.comments.push(com1, com2);
+  // //com1.renderTemplateComment("#comment-template", "#comment-target", );
+  // //com2.renderTemplateComment;
+  // post2.renderTemplatePostAll("#blog-template", "#blog-container");
    
-  var post3 = new Post("peeling back slack", "Slack has been many things to me, a way to get help, comic relief , a monitoring system, and a friend. It's a call in the night, 'Is there any body out there?...You wait and if your suave you can see who's out there."+
-    "but will anyone help you. Of course they will. Your freaking out and you watch the MIME of the guy slapping a way at the computer until his arms look"+
-    "like a windmill. Thank you Slack. Better yet thank for, whomever on the other end of the Slack. ");
-  post3.saveToPostAll();
-  post3.renderTemplatePostAll("#blog-template", "#blog-container");
-   console.log(Post.all);    
+  // var post3 = new Post("peeling back slack", "Slack has been many things to me, a way to get help, comic relief , a monitoring system, and a friend. It's a call in the night, 'Is there any body out there?...You wait and if your suave you can see who's out there."+
+  //   "but will anyone help you. Of course they will. Your freaking out and you watch the MIME of the guy slapping a way at the computer until his arms look"+
+  //   "like a windmill. Thank you Slack. Better yet thank for, whomever on the other end of the Slack. ");
+  // post3.saveToPostAll();
+  // post3.renderTemplatePostAll("#blog-template", "#blog-container");
+  //  console.log(Post.all);    
 
 
   //submit button 
@@ -252,17 +270,60 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
        }
 
 });
+  
+  $("#blog-container").on("click", "button.editPostBtn", function(){
+    console.log("I just clicked and made the edit modal open");
+    var postId = $(this).parent().parent().parent().attr("data-index");
+    console.log("the postId is");
+    console.log(postId);
 
+    $.ajax({
+      url: "/api/posts/" + postId,
+      type: "GET",
+      success: function(data){
+        $("#editTitleInput").val(data.title);
+        $("#editPostBody").val(data.body);
+      }
+
+    });
+    $.ajax({
+      var editedPost = {title: $("#editTitleInput").val(), body: $("editPostBody").val() }
+      url: "/api/posts/"+ postId,
+      tye: "PUT",
+      data: editedPost,
+      success: function(data){
+        
+      }
+    })
+
+
+  })
 
   $("#blog-container").on("click", "button.btn.txtAreaClose", function(){
     if($(this).parent().hasClass("errorInput") ){
       $(this).parent().removeClass("errorInput");
       $(this).parent().find("div.error").remove(); 
     }
-
     $(this).parent().find("textarea").val("");
     $(this).parent().toggleClass("hide");  
   });
+
+  $.ajax({
+    url: "/api/posts",
+    type: "GET",
+    success: function(data){
+      var posts = data;
+      posts.forEach(function(post){
+        console.log("this just posted from ajax");
+        console.log(post);
+        var newPost = new Post(post.id, post.title, post.body);
+        newPost.saveToPostAll();
+        newPost.renderTemplatePostAll("#blog-template", "#blog-container");
+
+      });
+    },
+  });
+
 
 });
 

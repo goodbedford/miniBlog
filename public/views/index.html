@@ -24,7 +24,9 @@
   <script type="text/template" id="blog-template">
   <div class="row postRow">
     <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 postBlockRight">
-      <h2 class="secondaryColor borderBtm"><%= title %></h2>
+      <h2 class="secondaryColor borderBtm"><%= title %>      
+      <button class="btn editPostBtn" data-toggle="modal" data-target="#editPostModal">Edit</button>
+</h2>
       <p class="majorColor"><%= body %><br /><span class="accentColor3 dateBoxRight"><%= postDate %></span></p>
     </div>  
     <div class="row">
@@ -87,7 +89,37 @@
       </div>
     </div>
 
-    
+    <!--Edit Post Modal -->
+    <div id="editPostModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+
+        <!-- Edit Modal content-->
+        <div class="modal-content">
+          <div class="modal-header text-center majorBgColor">
+            <button id="closeEditBtn" type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title secondaryColor">The <span class="">Junior</span> Developers Blog</h4>
+          </div>
+          <div class="modal-body">
+
+            <form id="modalEditForm" role="form">
+              <div class="form-group titleP">
+                <label for="titleInput">Title:</label>
+                <input id="editTitleInput" type="text" class="form-control" autofocus required>
+              </div>
+              <div class="form-group">
+                <label for="postBody">Post:</label>
+                <textarea id="editPostBody"  class="form-control" required></textarea>
+              </div>
+              <button id="editSubmitBtn" type="submit" class="btn btn-default">Submit</button>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
       <!-- Comment Modal 
     <div id="commentModal" class="modal fade" role="dialog">
       <div class="modal-dialog">

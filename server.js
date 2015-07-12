@@ -96,7 +96,20 @@ app.put("/api/posts/:postId", function(req, res){
     foundPost.body = req.body.body;
     
     res.json(foundPost);
+});
 
+app.delete("/api/posts/:postId", function(req, res){
+  var postId = req.params.postId;
+  var index;
+  posts.forEach(function(post){
+    if(post.id == id){
+      index = posts.indexOf(post);
+      posts.slice(index,1);
+      res.json({msg: "successful deletion of postId-" + postId});
+    }else{
+      res.json({msg: "Error: could not delete postId-" + postId});
+    }
+  });
 });
 
 

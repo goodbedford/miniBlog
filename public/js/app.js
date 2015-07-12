@@ -82,11 +82,24 @@ $(document).ready(function(){
     console.log("the this.id-");
     console.log(index);
     $postHtml.attr("data-index", index);
-    if (index % 2 != 0){
+
+    console.log("the body data-index - count---")
+    console.log($("body").find("div.postRow[data-index]").length);
+    console.log($("body").find("div.postRow[data-index]"));
+
+    //the styleIndex is used to have the styles switch sides from left to right.
+    //it counts the number of postRows with a data index attribute. There is always one less
+    //because the current post is hasn't got posted yet. so i add one to the number 
+    //and it doesn't matter what the data index is only the amount of postRows and that they toggle.
+    var styleIndex = $("body").find("div.postRow[data-index]").length;
+    index++;
+
+
+    if (styleIndex % 2 != 0){
      styleLeftPost($postHtml);
 
 
-      console.log($("body").children("data-index").length);
+      //console.log($("body").children("data-index").length);
 
     }   // $postHtml.animate({opacity: '0.50'}, 1000);
        $(where).prepend($postHtml);
@@ -96,7 +109,7 @@ $(document).ready(function(){
       somePost.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
       somePost.find("div h2").removeClass("secondaryColor").addClass("majorColor");
       somePost.find("div p").removeClass("majorColor").addClass("secondaryColor");
-      somePost.find("div p span").removeClass("dateBoxRight").addClass("dateBoxLeft");
+      somePost.find("div p span[data-hook='postDate']").removeClass("dateBoxRight").addClass("dateBoxLeft");
       somePost.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
       somePost.find("div").eq(1).find("div div").eq(0).addClass("flRight");
       somePost.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
@@ -111,13 +124,13 @@ $(document).ready(function(){
   //postToBlog
   function postToBlog(){
     event.preventDefault();
-
+      console.log("postBody--");
       console.log($postBody.val() );
       if ( $titleInput.val() !== "" && $postBody.val() !== "")
       { 
         if( !$("body").hasClass("errorInput")) {
           $("body").removeClass("errorInput");
-          var tempPost = {title:$titleInput.val(), body: $postBody.val().replace(/\n/gi, "<br />")};
+          var tempPost = {title:$titleInput.val(), body: $postBody.val()};  //.replace(/\n/gi, "<br />")};
           //tempPost.save(tempPost);
 
           //ajax post info to server
@@ -275,7 +288,7 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
   // open edit modal when you click button with clas editPostBtn
   $("#blog-container").on("click", "button.editPostBtn", function(){
     console.log("I just clicked and made the edit modal open");
-    var $postRowParent = $(this).parent().parent().parent();
+    var $postRowParent = $(this).parent().parent();
     //var $postDataHook = $(this).closet("data-hook", "postTitle");
     var postId = $postRowParent.attr("data-index");
     console.log("the postId is");
@@ -295,11 +308,27 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
 
 
   });
+
+  $("#blog-container").on("click", "button.deletePostBtn", function(){
+      var $postRowParent = $(this).parent().parent();
+      var postIndex = $postRowParent.attr("data-index");
+      console.log("the deleted postIndex");
+      console.log(postIndex)
+
+      $.ajax({
+        url: "/api/posts/" + postIndex,
+        type: "DELETE",
+        success: function(data){
+          $postRowParent.remove();  
+          console.log(data);
+        }
+      });
+  });
   $("#modalEditForm").on("click", ".editSubmitBtn", function(event){
     event.preventDefault();
     var editedPost = { id: parseInt($("#editTitleInput").attr("data-index")),
                        title: $("#editTitleInput").val(), 
-                       body: $("#editPostBody").val() 
+                       body: $("#editPostBody").val()
                      };
     console.log("this is it");
     console.log(editedPost);
@@ -319,7 +348,7 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
             //console.log("in update response.")
             //console.log($tempPost.find("[data-hook='postTitle']"));
             //console.log($tempPost.find("[data-hook='postBody']").text(post.body));
-            $tempPost.find("[data-hook='postBody']").text(post.body);
+            $tempPost.find("[data-hook='postBody']").html(post.body);
 
           }
         });

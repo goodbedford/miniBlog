@@ -3,7 +3,13 @@
 *  PUT YOUR CUSTOM CLASSES AND STYLES HERE
 */
 
+
+button.glyphicon.glyphicon-pencil.editPostBtn{
+  font-size: 8px;
+  border: none;
+}
 .navbar {
   border-radius: 0px;
 }
+
 

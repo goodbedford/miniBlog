@@ -24,10 +24,12 @@
   <script type="text/template" id="blog-template">
   <div class="row postRow">
     <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 postBlockRight">
-      <h2 class="secondaryColor borderBtm" data-hook="postTitle"><%= title %>      
-      <button class="btn editPostBtn" data-toggle="modal" data-target="#editPostModal">Edit</button>
-</h2>
-      <p class="majorColor" data-hook="postBody"><%= body %><br /><span class="accentColor3 dateBoxRight" data-hook="postDate"><%= postDate %></span></p>
+      <h2 class="secondaryColor borderBtm" ><span data-hook="postTitle"><%= title %></span></h2>  
+      <button class="glyphicon glyphicon-pencil editPostBtn" data-toggle="modal" data-target="#editPostModal">Edit</button>
+      <button class="glyphicon glyphicon-trash deletePostBtn" data-hook="deletePost">Delete </button>
+
+
+      <p class="majorColor"><span data-hook="postBody"><%= body %></span><br /><span class="accentColor3 dateBoxRight" data-hook="postDate"><%= postDate %></span></p>
     </div>  
     <div class="row">
       <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 ">

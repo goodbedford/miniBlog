@@ -29,8 +29,14 @@ var post2 = { id:2,
               title: "2finding my community", 
               body: "In just two weeks of dev school and a few hundred hours later. I have found my community, and I am in love."
             }
+var post3 = { id: 3,
+              title: "1building my blog", 
+              body: "Today we reviewed OOP, not the song by Naughty By Nature but the"+ 
+                    "object oriented programming. We covered inheretance. We used localStorage to temperaily store post unitl we learn"+
+                    "how to use databases. We used underscore for the template and other utilites."
+            };
 //add post to posts array
-posts.push(post1, post2);                      
+posts.push(post1, post2, post3);                      
 
 // fix use for local
 app.all('/*', function(req, res, next) {
@@ -108,7 +114,7 @@ app.delete("/api/posts/:postId", function(req, res){
   posts.forEach(function(post){
     if(post.id == postId){
       foundPost = post;
-      index = posts.indexOf(post);
+      index = posts.indexOf(post); 
       posts.splice(index, 1);
     }
   });

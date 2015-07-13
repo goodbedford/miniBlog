@@ -82,6 +82,7 @@ button.addCommentLeft{
 button.glyphicon{
   font-size: 8px;
   background-color: white;
+  color: #6A351B;
   border: none;
 }
 .commentBox{

@@ -84,7 +84,7 @@ app.put("/api/posts/:postId", function(req, res){
   var id = req.params.postId;
  var updatedPost = req.body;
  console.log("put post id----");
-  console.log(req)
+  console.log(req.body)
   var foundPost;
   posts.forEach(function(post){
     if(post.id == id){
@@ -100,16 +100,28 @@ app.put("/api/posts/:postId", function(req, res){
 
 app.delete("/api/posts/:postId", function(req, res){
   var postId = req.params.postId;
+  console.log("this is posts length before delete");
+  console.log(posts.length);
   var index;
+  var foundPost;
+
   posts.forEach(function(post){
     if(post.id == postId){
+      foundPost = post;
       index = posts.indexOf(post);
-      posts.slice(index,1);
-      res.json({msg: "successful deletion of postId-" + postId});
-    }else{
-      res.json({msg: "Error: could not delete postId-" + postId});
+      posts.splice(index, 1);
     }
   });
+  console.log(posts.indexOf(foundPost) );
+  if(posts.indexOf(foundPost) > -1 ){
+    console.log("posts length after delete");
+    console.log(posts.length);
+    //console.log(posts)
+    res.json({msg: "Error: could not delete postId-" + postId});
+  } else{
+    res.json({msg: "successful deletion of postId-" + postId});
+  }
+
 });
 
 

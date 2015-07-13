@@ -109,7 +109,7 @@ $(document).ready(function(){
       somePost.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
       somePost.find("div h2").removeClass("secondaryColor").addClass("majorColor");
       somePost.find("div p").removeClass("majorColor").addClass("secondaryColor");
-      somePost.find("div p span[data-hook='postDate']").removeClass("dateBoxRight").addClass("dateBoxLeft");
+      somePost.find("div span[data-hook='postDate']").removeClass("dateBoxRight").addClass("dateBoxLeft");
       somePost.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
       somePost.find("div").eq(1).find("div div").eq(0).addClass("flRight");
       somePost.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
@@ -316,9 +316,16 @@ $("#blog-container").on("click", "button.btn.txtAreaBtn", function(){
       console.log(postIndex)
 
       $.ajax({
-        url: "/api/posts/" + postIndex,
+        url: "/api/posts/" + parseInt(postIndex),
         type: "DELETE",
         success: function(data){
+          Post.all.forEach(function(post){
+            if( post.id == postIndex){
+              var index = Post.all.indexOf(post);
+              console.log("deleted this post--" + Post.all[index]);
+              Post.all.splice(index, 1);
+            }
+          })
           $postRowParent.remove();  
           console.log(data);
         }

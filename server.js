@@ -57,29 +57,30 @@ app.get('/api/posts', function(req, res) {
   res.status(200).json(posts);
 });
 
-// set up route for /posts/:postId JSON
+// GET /posts/:postId JSON
 app.get('/api/posts/:postId', function(req, res) {
   var index;
-
   //console.log(req)
-
   posts.forEach(function(post){
     console.log("post-Id---", post.id)
     if(post.id == req.params.postId){
       //index = posts.indexOf(post);
       console.log(post)
-      res.json(post);
+      res.status(200).json(post);
     }else{
       console.log("didn't find postId-", req.params.postId);
     }
   });
 });
 
-
+ 
 app.post('/api/posts', function(req, res){
   var id = posts.length +1;
-  var newPost = req.body;
+  var newPost = {};
   newPost.id = id;
+  newPost.title = req.body.title;
+  newPost.body = req.body.body;
+
   posts.push(newPost);
 
   res.status(201).json(newPost);
@@ -87,16 +88,20 @@ app.post('/api/posts', function(req, res){
 });
 
 app.put("/api/posts/:postId", function(req, res){
+  // var post = _.findWhere({id: req.params.id})
   var id = req.params.postId;
  var updatedPost = req.body;
  console.log("put post id----");
-  console.log(req.body)
+ console.log(req.body)
   var foundPost;
   posts.forEach(function(post){
     if(post.id == id){
       foundPost = post;
     }
   });
+
+  console.log(foundPost);
+  console.log(req.body.id);
     foundPost.id = req.body.id;
     foundPost.title = req.body.title;
     foundPost.body = req.body.body;
@@ -125,7 +130,7 @@ app.delete("/api/posts/:postId", function(req, res){
     //console.log(posts)
     res.json({msg: "Error: could not delete postId-" + postId});
   } else{
-    res.json({msg: "successful deletion of postId-" + postId});
+    res.status(200).json({msg: "successful deletion of postId-" + postId});
   }
 
 });

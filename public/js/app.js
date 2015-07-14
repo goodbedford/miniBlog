@@ -18,16 +18,15 @@ $(document).ready(function(){
     this.posts = localStorage.getItem("posts"); 
     this.key = "posts";
     this.comments = [];
-    //console.log("this is in post constructor and post is-",this.posts);
+
     function dateFormat (){
     var d = new Date();
     return d.toLocaleDateString();
     }
-
   }
+
   //
   Post.all =[];
-
 
   function Comment(body){
     this.body = body;
@@ -41,7 +40,7 @@ $(document).ready(function(){
   }
   Comment.all =[];
 
-  Comment.prototype.renderTemplateComment = function(template_source, whereId, $postSelector) {
+  Comment.prototype.render = function(template_source, whereId, $postSelector) {
     var template = _.template($(template_source).html());
     //var index =  Post.all.indexOf(this);
     var $commentHtml = $(template(this));
@@ -246,7 +245,7 @@ $(document).ready(function(){
 
            console.log("new comment--");
            console.log(comment1);
-           //comment1.renderTemplateComment("#comment-template", comTargetId, $postRow );
+           //comment1.render("#comment-template", comTargetId, $postRow );
            console.log("I just added comment to post", postIndex)
            console.log("HI Yall");
 

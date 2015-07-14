@@ -88,9 +88,9 @@ app.put('/api/posts/:id', function(req, res){
   var postId = req.params.id;
 
   Post.findOne({_id: postId}, function(err, foundPost){
+    console.log("server foundPost", foundPost);
     foundPost.title = req.body.title || foundPost.title;
     foundPost.body = req.body.body || foundPost.body;
-    foundPost.date = req.body.date || foundPost.date;
 
     foundPost.save(function(err, savedPost){
       res.status(200).json(savedPost);

@@ -7,26 +7,7 @@ $(document).ready(function(){
   var $postBody = $("#postBody");
   var $modalForm = $("#modalForm");
   var $makePostBtn =$("#makePostBtn");
-  // //Post constructor
-  // function Post (id,title, body){
-
-  //   console.log("started making new post");
-  //   this.id = id;
-  //   this.title = title;
-  //   this.body = body;
-  //   this.postDate = dateFormat();
-  //   this.posts = localStorage.getItem("posts"); 
-  //   this.key = "posts";
-  //   this.comments = [];
-
-  //   function dateFormat (){
-  //   var d = new Date();
-  //   return d.toLocaleDateString();
-  //   }
-  // }
-
-  // //
-  // Post.all =[];
+  var leftSide = false;
 
   // function Comment(body){
   //   this.body = body;
@@ -125,11 +106,6 @@ $(document).ready(function(){
   //     somePost.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
   //   }
   // }
-
-
-  // Post.prototype = new Post();
-  // Post.prototype.constructor = Post;
-
 
   //postToBlog
   function postToBlog(){
@@ -259,83 +235,34 @@ $(document).ready(function(){
   //        }
   // });
   
-  // open edit modal when you click button with clas editPostBtn
+  // open edit modal when you click button with class editPostBtn
   $("#blog-container").on("click", "button.editPostBtn", function(){
-    console.log("I just clicked and made the edit modal open");
-    var $postRowParent = $(this).parent().parent();
-    //var $postDataHook = $(this).closet("data-hook", "postTitle");
-    var postId = $postRowParent.attr("data-index");
-    console.log("the postId is");
-    console.log(postId);
-
-    $.ajax({
-      url: "/api/posts/" + postId,
-      type: "GET",
-      success: function(data){
-        $("#editTitleInput").val(data.title);
-        $("#editTitleInput").attr("data-index", postId);
-        $("#editPostBody").val(data.body);
-      }
-    });
+    var postId = $(this).attr("data-index");
+    console.log("the postId is",postId);
+    //get one Post info to put in edit fields
+    getPost(postId);
   });
-  // // this deletes the post on click of delete btn
-  // //sends id to server and deletes from post array
-  // $("#blog-container").on("click", "button.deletePostBtn", function(){
-  //     var $postRowParent = $(this).parent().parent();
-  //     var postIndex = $postRowParent.attr("data-index");
-  //     console.log("the deleted postIndex");
-  //     console.log(postIndex)
 
-  //     $.ajax({
-  //       url: "/api/posts/" + parseInt(postIndex),
-  //       type: "DELETE",
-  //       success: function(data){
-  //         Post.all.forEach(function(post){
-  //           if( post.id == postIndex){
-  //             var index = Post.all.indexOf(post);
-  //             console.log("deleted this post--" + Post.all[index]);
-  //             Post.all.splice(index, 1);
-  //           }
-  //         })
-  //         $postRowParent.remove();  
-  //         console.log(data);
-  //       }
-  //     });
-  // });
+  // this deletes the post on click of delete btn
+  $("#blog-container").on("click", "button.deletePostBtn", function(){
+      var postIndex = $(this).attr("data-index");
+      // Delete one post
+      deletePost(postIndex)
+  });
 
-  // // this submits the edited fields to server and updates each post row with new info using jquery
-  // $("#modalEditForm").on("click", ".editSubmitBtn", function(event){
-  //   event.preventDefault();
-  //   var editedPost = { id: parseInt($("#editTitleInput").attr("data-index")),
-  //                      title: $("#editTitleInput").val(), 
-  //                      body: $("#editPostBody").val()
-  //                    };
-  //   console.log("this is it");
-  //   console.log(editedPost);
-  //   // ajax to post id
-  //   $.ajax({        
-  //     url: "/api/posts/"+ editedPost.id,
-  //     type: "PUT",
-  //     data: editedPost,
-  //     success: function(data){
+  // this submits the edited fields to server and updates each post row with new info using jquery
+  $("#modalEditForm").on("click", ".editSubmitBtn", function(event){
+    event.preventDefault();
+    var editedPost = { id: $("#editTitleInput").attr("data-index"),
+                       title: $("#editTitleInput").val(), 
+                       body: $("#editPostBody").val()
+                     };
+    console.log("the edited Post", editedPost);
+    
+    //PUT update one post
+    updatePost(editedPost);
 
-  //       Post.all.forEach(function(post){
-  //         if(post.id == data.id){
-  //           post.title = data.title;
-  //           post.body = data.body;            
-  //           var $tempPost = $("#blog-container").find("div[data-index='"+post.id+"']");
-  //           $tempPost.find("[data-hook='postTitle']").text(post.title);
-  //           //console.log("in update response.")
-  //           //console.log($tempPost.find("[data-hook='postTitle']"));
-  //           //console.log($tempPost.find("[data-hook='postBody']").text(post.body));
-  //           $tempPost.find("[data-hook='postBody']").html(post.body);
-
-  //         }
-  //       });
-  //       $("#closeEditBtn").trigger("click");
-  //     }
-  //   });
-  // });
+  });
 
   // $("#blog-container").on("click", "button.btn.txtAreaClose", function(){
   //   if($(this).parent().hasClass("errorInput") ){
@@ -346,7 +273,9 @@ $(document).ready(function(){
   //   $(this).parent().toggleClass("hide");  
   // });
 
-  function startPage(){
+  
+  //GET all posts
+  function allPosts(){
     $.ajax({
       url: "/api/posts",
       type: "GET",
@@ -354,6 +283,8 @@ $(document).ready(function(){
         renderMany(data, dateFormatter);
       }
     });
+      assignSide();
+
   }
   //create Post
   function create(postObj){
@@ -367,6 +298,43 @@ $(document).ready(function(){
       }
     });
   }
+  //Update one Post
+  function updatePost(postObj){
+    $.ajax({
+      url: "/api/posts/" + postObj.id,
+      type: "PUT",
+      data: postObj,
+      success: function(data){
+      console.log("the return put data", data);
+      renderOne(data, dateFormatter);
+      }
+    });
+  }
+  //Delete one Post
+  function deletePost(postId){
+    $.ajax({
+      url: "/api/posts/" + postId,
+      type: "DELETE",
+      success: function(data){
+      console.log("the return Delete data", data);
+      $("#blog-container").find("[data-index='"+ data._id +"']").remove();
+      }
+    });
+    assignSide();
+
+  }
+  //GET one post by Id
+  function getPost( postId){
+    $.ajax({
+      url: "/api/posts/" + postId,
+      type: "GET",
+      success: function(data){
+        $("#editTitleInput").val(data.title);
+        $("#editTitleInput").attr("data-index", data._id);
+        $("#editPostBody").val(data.body);
+      }
+    });
+  }
 
   // render Many post takes second argument of date formatter func
   function renderMany(posts ,func){
@@ -374,8 +342,9 @@ $(document).ready(function(){
       post.postDate = func(post.postDate);
       var template = _.template($("#blog-template").html());
       var $commentHtml = $(template(post));
-      $("#blog-container").prepend($commentHtml)
+      $("#blog-container").prepend($commentHtml);
     });
+    assignSide();
   }
   // render One post function takes second
   function renderOne(post, func){
@@ -397,8 +366,24 @@ $(document).ready(function(){
     return date;
     console.log(date);
   }
+  function ltSide(rowId){
+    var $parentRow =$("#blog-container").find("div[data-index=" + rowId +"']");
+    if ( $parentRow.hasClass("rt-side") ){
 
-  startPage();
 
+    }
+  }
+  function assignSide(rowId){
+    var count = $("#blog-container").find("div[data-row]");
+    console.log("the count of postRows",count.length);
+    if(count.length % 2 == 0){
+      
+
+
+
+      leftSide = true;
+    }
+  }
+  allPosts();
 });
 

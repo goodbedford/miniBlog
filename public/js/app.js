@@ -258,9 +258,9 @@ $(document).ready(function(){
                        body: $("#editPostBody").val()
                      };
     console.log("the edited Post", editedPost);
-    
     //PUT update one post
     updatePost(editedPost);
+    $("#closeEditBtn").trigger("click");
 
   });
 
@@ -283,7 +283,6 @@ $(document).ready(function(){
         renderMany(data, dateFormatter);
       }
     });
-      assignSide();
 
   }
   //create Post
@@ -306,7 +305,7 @@ $(document).ready(function(){
       data: postObj,
       success: function(data){
       console.log("the return put data", data);
-      renderOne(data, dateFormatter);
+      renderOneUpdate(data, dateFormatter);
       }
     });
   }
@@ -316,11 +315,12 @@ $(document).ready(function(){
       url: "/api/posts/" + postId,
       type: "DELETE",
       success: function(data){
-      console.log("the return Delete data", data);
-      $("#blog-container").find("[data-index='"+ data._id +"']").remove();
+      //console.log("the return Delete data", data);
+      //$("#blog-container").find("[data-index='"+ data._id +"']").remove();
+      $("#blog-container").empty();
+      renderMany(data, dateFormatter);
       }
     });
-    assignSide();
 
   }
   //GET one post by Id
@@ -342,16 +342,32 @@ $(document).ready(function(){
       post.postDate = func(post.postDate);
       var template = _.template($("#blog-template").html());
       var $commentHtml = $(template(post));
+      if( even() ){
+        ltSide($commentHtml);
+      } else{
+
+      }
       $("#blog-container").prepend($commentHtml);
     });
-    assignSide();
   }
   // render One post function takes second
   function renderOne(post, func){
       post.postDate = func(post.postDate);
       var template = _.template($("#blog-template").html());
       var $commentHtml = $(template(post));
+      if( even() ){
+        ltSide($commentHtml);
+      }
       $("#blog-container").prepend($commentHtml);
+  }
+
+  // render One post UPDate function takes second
+  function renderOneUpdate(post, func){
+      post.postDate = func(post.postDate);
+      var $parentRow = $("#blog-container").find("div.postRow[data-index='" + post._id + "']")
+      $parentRow.find("span[data-hook='postTitle']").text(post.title);
+      $parentRow.find("span[data-hook='postBody']").text(post.body);
+      $parentRow.find("span[data-hook='postDate']").text(post.postDate);
   }
 
   // date Formatter
@@ -364,24 +380,37 @@ $(document).ready(function(){
     var day = date[2];
     date = month + "-" + day + "-" + year;
     return date;
-    console.log(date);
+    console.log(date); 
   }
-  function ltSide(rowId){
-    var $parentRow =$("#blog-container").find("div[data-index=" + rowId +"']");
-    if ( $parentRow.hasClass("rt-side") ){
+  function ltSide($parentRow){
+    //var $parentRow =$("#blog-container").find("div[data-index='" + rowId +"']");
+    //console.log("this is parentRow classes", $("#blog-container").find("div[data-row='data-row']")  );
+    $parentRow.find("div[data-row='data-row'].rt-side").removeClass("rt-side");
+    $parentRow.find("div").eq(0).removeClass("col-xs-4 sm-5 col-sm-offset-6 postBlockRight");
+    $parentRow.find("div").eq(0).addClass("col-sm-5 col-sm-offset-1 postBlockLeft");
+    $parentRow.find("div h2").removeClass("secondaryColor").addClass("majorColor");
+    $parentRow.find("div p").removeClass("majorColor").addClass("secondaryColor");
+    $parentRow.find("div span[data-hook='postDate']").removeClass("dateBoxRight").addClass("dateBoxLeft");
+    $parentRow.find("div").eq(1).find("div").eq(0).addClass("col-sm-offset-2 col-sm-pull-1");
+    $parentRow.find("div").eq(1).find("div div").eq(0).addClass("flRight");
+    $parentRow.find("div").eq(1).find("div div button").eq(0).removeClass("addCommentRight").addClass("addCommentLeft");
 
-
-    }
+    // $parentRow.find("div.commentRow")
+    //           .removeClass("col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox")
+    //           .addClass("col-xs-4 col-xs-offset-4 col-sm-4 col-sm-pull-3 commentBoxLeft");
+    //$col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox'></div>");
+    //   //      }else{
+    //   //        $col = $("<div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-pull-3 commentBoxLeft'></div>");
   }
-  function assignSide(rowId){
+
+  function rtSide($parentRow){
+    $
+  }
+  function even(){
     var count = $("#blog-container").find("div[data-row]");
-    console.log("the count of postRows",count.length);
-    if(count.length % 2 == 0){
-      
-
-
-
-      leftSide = true;
+    console.log("the count of postRows ",count.length +1 );
+    if( (count.length + 1) % 2 == 0 ){
+      return true;
     }
   }
   allPosts();

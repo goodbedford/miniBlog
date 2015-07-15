@@ -22,9 +22,9 @@
     </div>
     <!-- underscore Post template -->
   <script type="text/template" id="blog-template">
-  <div data-index="<%= _id %>" class="row postRow rt-side" data-row="data-row">
+  <div data-index="<%= _id %>" class="row postRow" data-row="data-row">
     <div class="col-xs-8 col-xs-offset-2 col-sm-5 col-sm-offset-6 postBlockRight">
-      <h2 class="secondaryColor borderBtm" ><span data-index="<%= _id %>" data-hook="postTitle"><%= title %></span></h2>  
+      <h2 class="secondaryColor borderBtm " ><span data-index="<%= _id %>" data-hook="postTitle"><%= title %></span></h2>  
       <p class="majorColor"><span data-index="<%= _id %>" data-hook="postBody"><%= body %></span></p>
             <span data-index="<%= _id %>" class="accentColor3 dateBoxRight" data-hook="postDate"><%= postDate %></span>
       <button data-index="<%= _id %>" class="glyphicon glyphicon-pencil editPostBtn" data-toggle="modal" data-target="#editPostModal">Edit</button>
@@ -35,11 +35,11 @@
         <div class="accentColor"> <button class="launchComment addCommentRight" data-toggle="" data-target="#commentModal">Add Comment</button></div> 
         <div class="commentContainer hide"><textarea data-index="<%= _id %>" class="commentForm " data-hook="textArea"></textarea><button class="btn txtAreaBtn">Submit</submit><button class="btn txtAreaClose">Close</button></div>
       </div>
-   <!--     comments.forEach(function(commentItem){ 
-        <div class="row ">
-            <div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox comment-target'> commentItem.body </div> 
-        </div>
-         }); -->
+     <!--   comments.forEach(function(commentItem){
+          <div class="row commentRow">
+            <div class='col-xs-4 col-xs-offset-4 col-sm-4 col-sm-offset-7 commentBox comment-target'>commentItem.body </div> 
+        </div> 
+         });  -->
     </div>
       <div id='comment-container-<%= _id %>' class="" ></div>
   </div>

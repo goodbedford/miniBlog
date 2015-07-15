@@ -7,8 +7,10 @@ var express = require('express'),
     cors = require('cors'),
     _ = require('underscore'),
     mongoose = require("mongoose"),
-    Post = require("./models/post");
-
+    Post = require("./models/post.js"),
+    Comment = require("./models/comment.js"),
+    Author = require("./models/author.js");
+            
 // connnect Mongoose to database
 mongoose.connect("mongodb://localhost/blogProject");
 
@@ -57,7 +59,7 @@ app.get('/', function(req, res) {
 
 // GET all post
 app.get('/api/posts', function(req, res) {
-  Post.find(function(err, posts){
+  Post.find().populate('authors').exec(function(err, posts){
     res.json(posts);
   });
 });
@@ -65,9 +67,11 @@ app.get('/api/posts', function(req, res) {
 // POST a new post to database
 app.post('/api/posts', function(req, res){
   var newPost = new Post({
+    author: req.body.author,
     title: req.body.title, 
     body: req.body.body, 
-    datePost: req.body.datePost 
+    datePost: req.body.datePost,
+    comments: [req.body.comments] 
   });
   newPost.save(function(err, savedPost){
     res.status(201).json(savedPost);
@@ -94,20 +98,61 @@ app.put('/api/posts/:id', function(req, res){
 
     foundPost.save(function(err, savedPost){
       res.status(200).json(savedPost);
+    });  
+  }); 
+});
+
+//DELETE post by ID
+app.delete("/api/posts/:id", function(req, res){
+  var postId = req.params.id;
+
+  Post.findOneAndRemove({_id: postId}, function(err, deletedPost){
+    //res.json(deletedPost);
+  });
+  Post.find(function(err, posts){
+    res.json(posts);
+  });
+});
+ 
+
+ ///Get authors
+
+ app.get("/api/authors", function(req, res){
+  Author.find(function(err, authors){
+    console.log(authors);
+    res.json(authors);
+  });
+ });   // 55a5cd8d987d4d7a50e8a47c
+/////////////////////////////
+//nested resources
+//Get all post from specific Id
+app.get("/api/posts/:id/comments", function(req,res){
+  Post.find(function(err, posts){
+    _.each(posts, function(post){
+      _.each(post.comments, function(comment){
+        console.log(comments);
+      });
+      res.json(post.comments);
     });
   });
 });
 
-//DELETE post by ID
-app.delete('/api/posts/:id', function(req, res){
+//nested resources
+//POST Comment to specific Post Id
+app.post("/api/posts/:id/comments", function(req,res){
   var postId = req.params.id;
-
-  Post.findOneAndRemove({_id: postId}, function(err, deletedPost){
-    res.json(deletedPost);
+  Post.findOne({_id: postId}, function(err, posts){
+    _.each(posts, function(post){
+      var newComment = new Comment({ body: req.body.body,
+                                     commentDate: req.body.commentDate});
+      newComment.save();
+      _.each(post.comments, function(comment){
+        console.log(comments); 
+      });
+      res.json(post.comments);
+    });
   });
 });
-
-
 // listen on port 3000
 app.listen(3000, function () {
   console.log('server started on localhost:3000');
